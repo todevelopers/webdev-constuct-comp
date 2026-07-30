@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=Barlow:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; overflow-x: hidden; background: #0e0d0c; }
+  body { font-family: Barlow, Helvetica, sans-serif; color: #16110d; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  a { color: oklch(0.62 0.15 55); text-decoration: none; }
+  a:hover { color: oklch(0.72 0.15 55); }
+  input, textarea, select, button { font-family: inherit; }
+  ::selection { background: oklch(0.72 0.15 55); color: #16110d; }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="#16110d"></rect><rect x="34" y="52" width="52" height="10" fill="#e08b3c"></rect><rect x="34" y="66" width="52" height="10" fill="#f4f2ef"></rect><rect x="34" y="42" width="24" height="6" fill="#f4f2ef"></rect></svg></template>
+<div ref="{{ rootRef }}" style="--ink: #0e0d0c; --ink2: #16110d; --paper: #f4f2ef; --line: #ddd8d1; --line2: #c9c2ba; --line3: #e6e1da; --body: #443c34; --muted: #6d645b; --a1: oklch(0.72 0.15 55); --a1h: oklch(0.82 0.15 55); --a2: oklch(0.78 0.12 55); --a3: oklch(0.84 0.108 55); --a4: oklch(0.62 0.15 55); --a5: oklch(0.55 0.14 55); background: var(--paper); min-height: 100vh;">
+
+  <div style="position: sticky; top: 0; z-index: 40; background: rgba(14,13,12,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 32px); min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: clamp(12px, 2vw, 32px); flex-wrap: wrap;">
+      <a href="#uvod" style="display: flex; align-items: baseline; gap: 8px; color: #fff; min-width: 0;">
+        <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(21px, 5vw, 27px); letter-spacing: 0.06em; text-transform: uppercase;">Stavbex</span>
+        <span style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--a1);">s.r.o.</span>
+      </a>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: center; gap: clamp(14px, 2vw, 30px);">
+          <a href="#realizacie" style="font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.72); white-space: nowrap; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="color:#fff">Realizácie</a>
+          <a href="#sluzby" style="font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.72); white-space: nowrap; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="color:#fff">Služby</a>
+          <a href="#onas" style="font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.72); white-space: nowrap; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="color:#fff">O nás</a>
+          <a href="#kontakt" style="font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.72); white-space: nowrap; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="color:#fff">Kontakt</a>
+          <a href="#ponuka" style="font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink2); background: var(--a1); padding: 11px 20px; white-space: nowrap; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1h);color:var(--ink2)">cenová ponuka</a>
+        </div>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: stretch; gap: 10px;">
+          <a href="#ponuka" style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink2); background: var(--a1); padding: 13px 16px; display: flex; align-items: center; white-space: nowrap; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1h);color:var(--ink2)">Cenová Ponuka</a>
+          <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width: 44px; align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: none; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; padding: 0; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="border-color:#ffffff;background:rgba(255,255,255,0.08)">
+            <span style="width: 20px; height: 2px; background: #fff; display: block;"></span>
+            <span style="width: 20px; height: 2px; background: #fff; display: block;"></span>
+            <span style="width: 20px; height: 2px; background: #fff; display: block;"></span>
+          </button>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column;">
+        <a href="#realizacie" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Realizácie</a>
+        <a href="#sluzby" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Služby</a>
+        <a href="#onas" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">O nás</a>
+        <a href="#kontakt" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--a2); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Kontakt</a>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ isA }}" hint-placeholder-val="{{ true }}">
+    <div id="uvod" style="position: relative; background: var(--ink); overflow: hidden;">
+      <video ref="{{ heroRef }}" autoplay="{{ yes }}" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" preload="auto" poster="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&amp;fit=crop&amp;w=1200&amp;h=720&amp;q=62" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.55;">
+        <source src="https://videos.pexels.com/video-files/14058349/14058349-sd_960_540_25fps.mp4" type="video/mp4">
+      </video>
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,13,12,0.82) 0%, rgba(14,13,12,0.5) 42%, rgba(14,13,12,0.92) 100%);"></div>
+      <div style="position: relative; max-width: 1320px; margin: 0 auto; padding: clamp(96px, 14vw, 132px) clamp(16px, 4vw, 32px) clamp(64px, 9vw, 96px); color: #fff;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px;">
+          
+          <span style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a2);">Stavebné práce · Rekonštrukcie · Fasády</span>
+        </div>
+        <h1 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(42px, 7vw, 104px); line-height: 0.92; letter-spacing: -0.01em; text-transform: uppercase; margin: 0; max-width: 14ch; text-wrap: balance;">Staviame presne a v termíne</h1>
+        <p style="margin: 30px 0 0; max-width: 52ch; font-size: 19px; line-height: 1.6; color: rgba(255,255,255,0.76);">Hrubé stavby, kompletné rekonštrukcie bytov a domov, fasády a zatepľovanie. Pracujeme s vlastnými murárskymi partiami, s pevným rozpisom prác a jasným harmonogramom.</p>
+        <div style="display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap;">
+          <a href="#realizacie" style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink2); background: var(--a1); padding: 17px 30px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1h);color:var(--ink2)">Prezrieť realizácie</a>
+          <a href="#ponuka" style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255,255,255,0.35); padding: 17px 30px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:#ffffff;color:var(--ink2);border-color:#ffffff">Napísať nám</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: {{ statsCols }}; gap: 1px; margin-top: 84px; background: rgba(255,255,255,0.14);">
+          <div style="background: var(--ink); padding: 24px 26px;"><div style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; color: var(--a2);">18</div><div style="font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px;">rokov na trhu</div></div>
+          <div style="background: var(--ink); padding: 24px 26px;"><div style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; color: var(--a2);">240+</div><div style="font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px;">realizácií</div></div>
+          <div style="background: var(--ink); padding: 24px 26px;"><div style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; color: var(--a2);">6</div><div style="font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px;">vlastných partií</div></div>
+          <div style="background: var(--ink); padding: 24px 26px;"><div style="font-family: 'Barlow Condensed', sans-serif; font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; color: var(--a2);">5 r.</div><div style="font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px;">záruka na dielo</div></div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isB }}" hint-placeholder-val="{{ false }}">
+    <div id="uvod" style="background: var(--paper);">
+      <div style="max-width: 1320px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 32px);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 0; align-items: stretch; border-bottom: 1px solid var(--line);">
+          <div style="padding: clamp(72px, 10vw, 110px) clamp(0px, 4vw, 64px) clamp(64px, 9vw, 96px) 0;">
+            <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a5); margin-bottom: 26px;">Stavebná firma · Bratislava a okolie</div>
+            <h1 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(36px, 5.4vw, 92px); line-height: 0.93; text-transform: uppercase; margin: 0; color: var(--ink2); max-width: 15ch; text-wrap: balance;">Hrubé stavby a rekonštrukcie <span style="color: var(--a4);">bez dohadov</span></h1>
+            <p style="margin: 28px 0 0; max-width: 46ch; font-size: 18.5px; line-height: 1.62; color: var(--body);">Rozpis prác, cena za merné jednotky a harmonogram dostanete pred podpisom. Na stavbe je vždy jeden zodpovedný stavbyvedúci.</p>
+            <div style="display: flex; gap: 14px; margin-top: 38px; flex-wrap: wrap;">
+              <a href="#realizacie" style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--paper); background: var(--ink2); padding: 17px 30px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1);color:var(--ink2)">Prezrieť realizácie</a>
+              <a href="#ponuka" style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink2); border: 1px solid var(--ink2); padding: 17px 30px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--ink2);color:var(--paper)">Napísať nám</a>
+            </div>
+            <div style="display: flex; gap: 44px; margin-top: 64px; flex-wrap: wrap;">
+              <div><div style="font-family: 'Barlow Condensed', sans-serif; font-size: 38px; font-weight: 700; color: var(--ink2);">18</div><div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);">rokov na trhu</div></div>
+              <div><div style="font-family: 'Barlow Condensed', sans-serif; font-size: 38px; font-weight: 700; color: var(--ink2);">240+</div><div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);">realizácií</div></div>
+              <div><div style="font-family: 'Barlow Condensed', sans-serif; font-size: 38px; font-weight: 700; color: var(--ink2);">5 r.</div><div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);">záruka na dielo</div></div>
+            </div>
+          </div>
+          <div style="position: relative; min-height: clamp(280px, 50vw, 640px); background: var(--ink);">
+            <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&amp;fit=crop&amp;w=800&amp;h=1070&amp;q=62" alt="Realizácia" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showPromo }}" hint-placeholder-val="{{ true }}">
+    <div style="background: var(--ink2);">
+      <div style="max-width: 1320px; margin: 0 auto; padding: clamp(56px, 9vw, 88px) clamp(16px, 4vw, 32px);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: clamp(32px, 4vw, 56px); align-items: center;">
+          <div>
+            <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a2);">Promo video</div>
+            <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(30px, 4vw, 46px); line-height: 1; text-transform: uppercase; margin: 16px 0 0; color: #fff;">Ako pracujeme</h2>
+            <p style="margin: 16px 0 0; font-size: 16.5px; line-height: 1.6; color: rgba(255,255,255,0.66);">Tri minúty zo stavby: príprava, hrubá stavba, dokončovacie práce.</p>
+          </div>
+          <div style="position: relative; background: #000;">
+            <video ref="{{ promoRef }}" controls="{{ yes }}" playsInline="{{ yes }}" preload="metadata" style="width: 100%; aspect-ratio: 16/9; background: #000; display: block;">
+              <source src="https://videos.pexels.com/video-files/10810480/10810480-sd_960_540_30fps.mp4#t=1" type="video/mp4">
+            </video>
+            <sc-if value="{{ promoIdle }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ playPromo }}" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; background: rgba(14,13,12,0.3); border: 0; cursor: pointer;" style-hover="background:rgba(14,13,12,0.12)">
+                
+                
+              </button>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div id="realizacie" style="background: var(--paper);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: clamp(64px, 10vw, 100px) clamp(16px, 4vw, 32px) clamp(72px, 11vw, 110px);">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 26px;">
+        <div>
+          <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a5);">Galéria</div>
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(34px, 5.4vw, 62px); line-height: 1; text-transform: uppercase; margin: 12px 0 0; color: var(--ink2);">Realizované projekty</h2>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onClick }}" style="{{ c.style }}" style-hover="background:var(--ink2);color:var(--paper);border-color:var(--ink2)">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ isA }}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: clamp(10px, 1.5vw, 20px); margin-top: 40px;">
+          <sc-for list="{{ visible }}" as="p" hint-placeholder-count="6">
+            <div onClick="{{ p.open }}" style="{{ p.spanStyle }}">
+              <div style="position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--line);">
+                <img src="{{ p.cover }}" alt="{{ p.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 700ms cubic-bezier(.2,.7,.2,1);" style-hover="transform:scale(1.06)">
+                <div style="position: absolute; inset: 0; background: linear-gradient(0deg, rgba(14,13,12,0.86) 0%, rgba(14,13,12,0.1) 55%, rgba(14,13,12,0) 100%);"></div>
+                <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 26px; color: #fff;">
+                  <div style="display: flex; align-items: center; gap: 10px; font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--a3);">
+                    <span>{{ p.category }}</span><span style="opacity: 0.45;">/</span><span style="color: rgba(255,255,255,0.7);">{{ p.year }}</span>
+                  </div>
+                  <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 29px; line-height: 1.06; text-transform: uppercase; margin-top: 8px;">{{ p.title }}</div>
+                  <div style="font-size: 14px; color: rgba(255,255,255,0.68); margin-top: 4px;">{{ p.place }} · {{ p.area }}</div>
+                </div>
+                <div style="position: absolute; top: 18px; right: 18px; display: flex; gap: 8px;">
+                  <span style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; background: rgba(14,13,12,0.72); color: #fff; padding: 6px 10px;">{{ p.mediaLabel }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isB }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line);">
+          <sc-for list="{{ visible }}" as="p" hint-placeholder-count="6">
+            <div onClick="{{ p.open }}" style="background: var(--paper); cursor: pointer; display: flex; flex-direction: column;" style-hover="background:#fff">
+              <div style="position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--line);">
+                <img src="{{ p.cover }}" alt="{{ p.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                <span style="position: absolute; top: 14px; left: 14px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; background: var(--paper); color: var(--ink2); padding: 6px 10px;">{{ p.mediaLabel }}</span>
+              </div>
+              <div style="padding: 22px 24px 26px;">
+                <div style="font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--a5);">{{ p.category }}</div>
+                <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.06; text-transform: uppercase; margin-top: 8px; color: var(--ink2);">{{ p.title }}</div>
+                <div style="display: flex; gap: 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line3); font-size: 13.5px; color: var(--muted);">
+                  <span>{{ p.place }}</span><span>{{ p.area }}</span><span>{{ p.year }}</span>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column;">
+        <a href="#realizacie" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Realizácie</a>
+        <a href="#sluzby" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Služby</a>
+        <a href="#onas" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.08); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">O nás</a>
+        <a href="#kontakt" onClick="{{ closeMenu }}" style="padding: 18px clamp(16px, 4vw, 32px); font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--a2); transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:rgba(255,255,255,0.08)">Kontakt</a>
+      </div>
+    </sc-if>
+  </div>
+
+  <div id="sluzby" style="background: var(--ink);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: clamp(64px, 10vw, 100px) clamp(16px, 4vw, 32px);">
+      <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a2);">Služby</div>
+      <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(34px, 5.4vw, 62px); line-height: 1; text-transform: uppercase; margin: 12px 0 48px; color: #fff;">Čo pre vás robíme</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 1px; background: rgba(255,255,255,0.14);">
+        <sc-for list="{{ services }}" as="s" hint-placeholder-count="6">
+          <div style="background: var(--ink); padding: 34px 30px 38px;" style-hover="background:var(--ink2)">
+            
+            <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 27px; text-transform: uppercase; color: #fff; margin-top: 14px;">{{ s.title }}</div>
+            <p style="margin: 12px 0 0; font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.62);">{{ s.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div id="onas" style="background: var(--paper);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: clamp(64px, 10vw, 100px) clamp(16px, 4vw, 32px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: clamp(40px, 5vw, 72px); align-items: start;">
+        <div>
+          <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a5);">O firme</div>
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(34px, 5.4vw, 62px); line-height: 1; text-transform: uppercase; margin: 12px 0 0; color: var(--ink2);">Stavbex s.r.o.</h2>
+          <p style="margin: 26px 0 0; font-size: 18px; line-height: 1.65; color: var(--body);">Sme stavebná firma z Bratislavy, ktorá od roku 2008 realizuje hrubé stavby, kompletné rekonštrukcie bytov a domov, fasády a interiéry. Nepracujeme cez sprostredkovateľov — murárske, obkladačské a sadrokartónové práce vykonávame vlastnými partiami.</p>
+          <p style="margin: 18px 0 0; font-size: 16.5px; line-height: 1.7; color: var(--muted);">Každú zákazku vediete s jedným stavbyvedúcim, ktorý je zodpovedný za harmonogram, preberanie materiálu aj koordináciu profesií. Cenovú ponuku dostanete rozpísanú po položkách vrátane merných jednotiek, takže viete presne, za čo platíte.</p>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line);">
+            <sc-for list="{{ facts }}" as="f" hint-placeholder-count="4">
+              <div style="background: var(--paper); padding: 22px 24px;">
+                <div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">{{ f.k }}</div>
+                <div style="font-size: 16.5px; color: var(--ink2); margin-top: 6px; font-weight: 500;">{{ f.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <img src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?auto=format&amp;fit=crop&amp;w=900&amp;h=600&amp;q=62" alt="Stavba" style="width: 100%; height: 340px; object-fit: cover; grid-column: span 2;">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&amp;fit=crop&amp;w=600&amp;h=450&amp;q=62" alt="Detail" style="width: 100%; height: 220px; object-fit: cover;">
+          <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&amp;fit=crop&amp;w=600&amp;h=450&amp;q=62" alt="Detail" style="width: 100%; height: 220px; object-fit: cover;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: fixed; right: clamp(14px, 3vw, 26px); bottom: clamp(14px, 3vw, 26px); z-index: 60; display: flex; flex-direction: column; align-items: flex-end; gap: 12px;">
+    <sc-if value="{{ settingsOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width: 268px; background: rgba(14,13,12,0.96); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.16); padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55);">Farebný akcent</div>
+          <button onClick="{{ closeSettings }}" aria-label="Zavrieť" style="width: 26px; height: 26px; background: none; border: 1px solid rgba(255,255,255,0.22); color: #fff; font-size: 14px; line-height: 1; cursor: pointer; transition: background-color 180ms ease;" style-hover="background:rgba(255,255,255,0.12)">×</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <sc-for list="{{ palettes }}" as="p" hint-placeholder-count="6">
+            <button onClick="{{ p.onClick }}" style="{{ p.rowStyle }}" style-hover="background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.34);color:#ffffff">
+              <span style="{{ p.dotStyle }}"></span><span>{{ p.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <button onClick="{{ toggleSettings }}" aria-label="Nastavenia vzhľadu" style="width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; background: var(--a1); border: 0; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.4); transition: background-color 180ms ease;" style-hover="background:var(--a1h)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0e0d0c" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.01a1.7 1.7 0 0 0 1.56 1.02H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.03z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div id="kontakt" style="background: var(--ink2);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: clamp(64px, 10vw, 100px) clamp(16px, 4vw, 32px);">
+      <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a2);">Kontakt</div>
+      <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(34px, 5vw, 58px); line-height: 1; text-transform: uppercase; margin: 12px 0 0; color: #fff;">Kde nás najdete</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(36px, 5vw, 72px); align-items: stretch; margin-top: clamp(36px, 5vw, 56px);">
+        <div style="display: flex; flex-direction: column; gap: 26px;">
+          <div><div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45);">Telefón</div><div style="font-size: 21px; color: #fff; margin-top: 4px;">+421 903 118 240</div></div>
+          <div><div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45);">E-mail</div><div style="font-size: 21px; color: #fff; margin-top: 4px;">info@stavbex.sk</div></div>
+          <div><div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45);">Sídlo</div><div style="font-size: 17px; color: rgba(255,255,255,0.82); margin-top: 4px; line-height: 1.5;">Priemyselná 14, 821 09 Bratislava<br>IČO 45 812 337 · DIČ 2023114892</div></div>
+          <div><div style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.45);">Obhliadky</div><div style="font-size: 17px; color: rgba(255,255,255,0.82); margin-top: 4px; line-height: 1.5;">Pondelok – piatok, 7:00 – 17:00<br>Po dohode aj v sobotu</div></div>
+          <a href="#ponuka" style="align-self: flex-start; margin-top: 6px; font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink2); background: var(--a1); padding: 16px 28px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1h);color:var(--ink2)">Chcem cenovú ponuku</a>
+        </div>
+        <div style="border: 1px solid rgba(255,255,255,0.16); display: flex; min-height: 320px;">
+          <div style="position: relative; z-index: 0; isolation: isolate; background: #171513; overflow: hidden; flex: 1; display: flex;">
+            <iframe title="Mapa – sídlo STAVBEX" src="https://maps.google.com/maps?q=Priemyseln%C3%A1%2014%2C%20821%2009%20Bratislava&amp;z=15&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="display: block; width: 100%; height: 100%; min-height: 320px; border: 0; filter: invert(0.92) hue-rotate(180deg) brightness(0.94) contrast(0.9) saturate(0.7);"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ponuka" style="background: var(--paper); border-top: 1px solid var(--line2);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: clamp(64px, 10vw, 100px) clamp(16px, 4vw, 32px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: clamp(40px, 5vw, 72px); align-items: start;">
+        <div>
+          <div style="font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--a5);">Cenová ponuka</div>
+          <h2 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(34px, 5vw, 58px); line-height: 1; text-transform: uppercase; margin: 12px 0 0; color: var(--ink2); max-width: 14ch; text-wrap: balance;">Nezáväzná cenová ponuka</h2>
+          <p style="margin: 22px 0 0; font-size: 17px; line-height: 1.6; color: var(--body); max-width: 44ch;">Napíšte nám rozsah prác a lokalitu. Ozveme sa do 48 hodín a dohodneme obhliadku. Ponuka obsahuje rozpis prác, cenu za merné jednotky a harmonogram.</p>
+          <div style="margin-top: 34px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 15.5px; color: var(--body); padding-top: 12px; border-top: 1px solid var(--line2);">Obhliadka a ponuka sú bezplatné</div>
+            <div style="font-size: 15.5px; color: var(--body); padding-top: 12px; border-top: 1px solid var(--line2);">Cena platí 30 dní od vystavenia</div>
+            <div style="font-size: 15.5px; color: var(--body); padding-top: 12px; border-top: 1px solid var(--line2);">Bez skrytých položiek a príplatkov</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid var(--line2); padding: clamp(24px, 4vw, 44px) clamp(20px, 4vw, 44px) clamp(28px, 4vw, 48px);">
+          <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 14px; min-height: 380px; justify-content: center; align-items: flex-start;">
+              <div style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); text-transform: uppercase; color: var(--ink2);">Správa odoslaná</div>
+              <p style="margin: 0; font-size: 17px; line-height: 1.6; color: var(--body); max-width: 42ch;">Ďakujeme. Ozveme sa najneskôr do dvoch pracovných dní na uvedené kontaktné údaje.</p>
+              <button onClick="{{ reset }}" style="margin-top: 12px; font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; background: none; border: 1px solid var(--ink2); color: var(--ink2); padding: 14px 24px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--ink2);color:var(--paper)">Odoslať ďalšiu</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 20px;">
+                <label style="display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">Meno a priezvisko *</span>
+                  <input type="text" placeholder="Ján Novák" style="border: 0; border-bottom: 1px solid var(--line2); background: none; padding: 10px 0; font-size: 16.5px; color: var(--ink2); outline: none;" style-focus="border-bottom-color:var(--a4)">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">Telefón *</span>
+                  <input type="tel" placeholder="+421" style="border: 0; border-bottom: 1px solid var(--line2); background: none; padding: 10px 0; font-size: 16.5px; color: var(--ink2); outline: none;" style-focus="border-bottom-color:var(--a4)">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">E-mail *</span>
+                  <input type="email" placeholder="jan.novak@email.sk" style="border: 0; border-bottom: 1px solid var(--line2); background: none; padding: 10px 0; font-size: 16.5px; color: var(--ink2); outline: none;" style-focus="border-bottom-color:var(--a4)">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 8px;">
+                  <span style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">Typ práce *</span>
+                  <select style="border: 0; border-bottom: 1px solid var(--line2); background: none; padding: 10px 0; font-size: 16.5px; color: var(--ink2); outline: none; border-radius: 0;">
+                    <option>Vyberte typ práce</option>
+                    <option>Hrubá stavba / murárske práce</option>
+                    <option>Rekonštrukcia bytu alebo domu</option>
+                    <option>Fasáda a zatepľovanie</option>
+                    <option>Interiér a sadrokartón</option>
+                    <option>Kúpeľňa, obklady a dlažby</option>
+                    <option>Iné / kombinácia prác</option>
+                  </select>
+                </label>
+              </div>
+              <label style="display: flex; flex-direction: column; gap: 8px; margin-top: 24px;">
+                <span style="font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);">Správa</span>
+                <textarea rows="4" placeholder="Rozsah prác, lokalita, predstava o termíne…" style="border: 1px solid var(--line2); background: none; padding: 12px 14px; font-size: 16.5px; color: var(--ink2); outline: none; resize: vertical;" style-focus="border-color:var(--a4)"></textarea>
+              </label>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 28px; flex-wrap: wrap;">
+                <span style="font-size: 13px; color: var(--muted); max-width: 38ch; line-height: 1.5;">Odoslaním súhlasíte so spracovaním údajov za účelom vypracovania ponuky.</span>
+                <button onClick="{{ send }}" style="font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; background: var(--ink2); color: var(--paper); border: 0; padding: 18px 34px; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1);color:var(--ink2)">Odoslať žiadosť</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: var(--ink); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div style="max-width: 1320px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 32px); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase; color: #fff;">Stavbex s.r.o.</span>
+      <span style="font-size: 13px; color: rgba(255,255,255,0.45);">© 2026 Stavbex s.r.o. · Ukážkový web s demo obsahom</span>
+    </div>
+  </div>
+
+  <sc-if value="{{ hasDetail }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 60; background: rgba(10,9,8,0.82); display: flex; justify-content: center; overflow-y: auto; padding: clamp(12px, 3vw, 40px) clamp(10px, 3vw, 24px);">
+      <div style="width: 100%; max-width: 1160px; background: var(--paper); align-self: flex-start;">
+        <div style="position: relative; background: var(--ink);">
+          <sc-if value="{{ detailShowsVideo }}" hint-placeholder-val="{{ false }}">
+            <video controls="" autoplay="" playsinline="" poster="{{ detailCover }}" src="{{ activeVideo }}" style="width: 100%; aspect-ratio: 16/9; display: block; background: #000;"></video>
+          </sc-if>
+          <sc-if value="{{ detailShowsPhoto }}" hint-placeholder-val="{{ true }}">
+            <img src="{{ activeImage }}" alt="{{ detail.title }}" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
+          </sc-if>
+          <button onClick="{{ close }}" style="position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; background: rgba(14,13,12,0.7); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1);color:var(--ink2)">×</button>
+        </div>
+        <div style="display: flex; gap: 10px; padding: 12px; background: var(--ink2); flex-wrap: wrap;">
+          <sc-for list="{{ detailMedia }}" as="m" hint-placeholder-count="5">
+            <button onClick="{{ m.select }}" style="{{ m.style }}">
+              <img src="{{ m.thumb }}" alt="Náhľad" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+              <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}">
+                <span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(14,13,12,0.45); color: #fff; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;">Video</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <div style="padding: clamp(26px, 4vw, 46px) clamp(20px, 4vw, 48px) clamp(32px, 4vw, 52px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: clamp(32px, 4vw, 56px);">
+          <div>
+            <div style="font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--a5);">{{ detail.category }}</div>
+            <h3 style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(30px, 4.6vw, 52px); line-height: 1; text-transform: uppercase; margin: 12px 0 0; color: var(--ink2);">{{ detail.title }}</h3>
+            <p style="margin: 22px 0 0; font-size: 17.5px; line-height: 1.65; color: var(--body);">{{ detail.text }}</p>
+            <div style="margin-top: 26px; display: flex; flex-direction: column; gap: 10px;">
+              <sc-for list="{{ detail.scope }}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; gap: 12px; align-items: baseline; font-size: 16px; color: var(--body);">
+                  <span style="width: 6px; height: 6px; background: var(--a4); flex: none;"></span>
+                  <span>{{ s }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="border: 1px solid var(--line);">
+            <sc-for list="{{ detailSpecs }}" as="sp" hint-placeholder-count="5">
+              <div style="display: flex; justify-content: space-between; gap: 16px; padding: 15px 20px; border-bottom: 1px solid var(--line3); font-size: 15.5px;">
+                <span style="color: var(--muted); letter-spacing: 0.04em;">{{ sp.k }}</span>
+                <span style="color: var(--ink2); font-weight: 500; text-align: right;">{{ sp.v }}</span>
+              </div>
+            </sc-for>
+            <a href="#ponuka" onClick="{{ close }}" style="display: block; text-align: center; padding: 17px; font-size: 12.5px; letter-spacing: 0.16em; text-transform: uppercase; background: var(--ink2); color: var(--paper); cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1);color:var(--ink2)">Chcem podobnú realizáciu</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;palette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;antracit + oranžová&quot;,&quot;grafit + modrá&quot;,&quot;bridlica + zelená&quot;,&quot;uhlie + limetka&quot;,&quot;bordó + krém&quot;,&quot;čisto neutrálna&quot;],&quot;default&quot;:&quot;antracit + oranžová&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Farebná paleta&quot;},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;'A' | 'B'&quot;,&quot;section&quot;:&quot;Verzia dizajnu&quot;},&quot;videoMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;oboje&quot;,&quot;len promo&quot;,&quot;len v projektoch&quot;],&quot;default&quot;:&quot;oboje&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Video&quot;}}">
+const PROJECTS = [
+  { id: 'p1', title: 'Rodinný dom Záhorská Bystrica', category: 'Hrubá stavba', year: '2025', place: 'Záhorská Bystrica', area: '186 m²',
+    text: 'Kompletná hrubá stavba dvojgeneračného domu vrátane základovej platne, murovaného systému, stropov a krovu. Stavba bola prevzatá v stave pred zatepľovaním o dva týždne pred dohodnutým termínom.',
+    scope: ['Základová platňa a izolácia proti vode', 'Murivo Ytong 300 mm, preklady', 'Monolitický strop a schodisko', 'Krov vrátane latovania a fólie'],
+    specs: [['Rozsah', 'Hrubá stavba na kľúč'], ['Doba realizácie', '5 mesiacov'], ['Zastavaná plocha', '186 m²'], ['Materiál', 'Ytong / betón C25/30'], ['Rok', '2025']] },
+  { id: 'p2', title: 'Rekonštrukcia bytu Petržalka', category: 'Rekonštrukcia', year: '2025', place: 'Bratislava – Petržalka', area: '72 m²',
+    text: 'Kompletná rekonštrukcia trojgarsónky vrátane vybúrania priečok, nových rozvodov elektriny a vody, podláh a kúpeľne. Byt bol odovzdaný ako obývateľný vrátane finálnych povrchov.',
+    scope: ['Búracie práce a odvoz sute', 'Nové elektroinštalácie a rozvody vody', 'Sadrokartónové podhľady s LED', 'Kúpeľňa a WC vrátane obkladov'],
+    specs: [['Rozsah', 'Rekonštrukcia na kľúč'], ['Doba realizácie', '11 týždňov'], ['Podlahová plocha', '72 m²'], ['Profesie', 'Elektro, voda, obklady'], ['Rok', '2025']] },
+  { id: 'p3', title: 'Zatepľovanie bytového domu Ružinov', category: 'Fasáda', year: '2024', place: 'Bratislava – Ružinov', area: '2 140 m²',
+    text: 'Zatepľovanie deväťposchodového bytového domu vrátane obnovy balkónov a hydroizolácie strechy. Práce boli realizované z fasádneho lešenia počas plnej obývanosti domu.',
+    scope: ['EPS 160 mm, sokel XPS', 'Obnova 54 balkónov', 'Hydroizolácia strechy', 'Silikónová tenkovrstvová omietka'],
+    specs: [['Rozsah', 'Zatepľovanie a obnova'], ['Doba realizácie', '7 mesiacov'], ['Plocha fasády', '2 140 m²'], ['Systém', 'ETICS, EPS 160 mm'], ['Rok', '2024']] },
+  { id: 'p4', title: 'Kúpeľňa a obklady vila Devín', category: 'Kúpeľne a obklady', year: '2024', place: 'Bratislava – Devín', area: '24 m²',
+    text: 'Dve kúpeľne s veľkoformátovým obkladom 120 × 260 cm, murovaným sprchovým kútom a podlahovým vykurovaním. Kladenie prebiehalo na milimetrovú škáru podľa kladačského plánu.',
+    scope: ['Veľkoformátový obklad 120 × 260 cm', 'Murovaný sprchový kút so spádom', 'Podlahové vykurovanie', 'Nerezové odtokové žľaby'],
+    specs: [['Rozsah', 'Kúpeľne na kľúč'], ['Doba realizácie', '6 týždňov'], ['Plocha', '24 m²'], ['Formát obkladu', '120 × 260 cm'], ['Rok', '2024']] },
+  { id: 'p5', title: 'Interiér kancelárie Nivy', category: 'Interiér', year: '2023', place: 'Bratislava – Nivy', area: '310 m²',
+    text: 'Sadrokartónové priečky a akustické podhľady pre open-space kanceláriu vrátane prípravy pre vzduchotechniku a osvetlenie. Realizácia prebiehala v dvoch etapách bez prerušenia prevádzky.',
+    scope: ['Akustické priečky EI 30', 'Kazetové a rastrové podhľady', 'Príprava pre VZT a osvetlenie', 'Finálne malby a stierky'],
+    specs: [['Rozsah', 'Interiérové práce'], ['Doba realizácie', '9 týždňov'], ['Plocha', '310 m²'], ['Etapy', '2 bez prerušenia prevádzky'], ['Rok', '2023']] },
+  { id: 'p6', title: 'Prístavba a terasa Dunajská Lužná', category: 'Rekonštrukcia', year: '2023', place: 'Dunajská Lužná', area: '58 m²',
+    text: 'Prístavba obytnej časti s presklenou stenou a krytou terasou na betónovej doske. Súčasťou bolo prepojenie s existujúcim domom vrátane statického zabezpečenia otvoru.',
+    scope: ['Statické zabezpečenie otvoru', 'Prístavba 42 m² vrátane stropu', 'Krytá terasa 16 m²', 'Klampiarske a izolatérske práce'],
+    specs: [['Rozsah', 'Prístavba na kľúč'], ['Doba realizácie', '4 mesiace'], ['Plocha', '58 m²'], ['Statika', 'Ocelový prievlak HEB 200'], ['Rok', '2023']] }
+];
+
+const PHOTOS = {
+  p1: ['1504307651254-35680f356dfd', '1503387837-b154d5074bd2', '1487958449943-2429e8be8625', '1503174971373-b1f69850bded'],
+  p2: ['1600566752355-35792bedcfea', '1600607687939-ce8a6c25118c', '1600585154340-be6161a56a0c', '1605276374104-dee2a0ed3cd6'],
+  p3: ['1486406146926-c627a92ad1ab', '1621905251189-08b45d6a269e', '1621905252507-b35492cc74b4', '1531834685032-c34bf0d84c77'],
+  p4: ['1620626011761-996317b8d101', '1600566753190-17f0baa2a6c3', '1600585154340-be6161a56a0c', '1517581177682-a085bb7ffb15'],
+  p5: ['1497366754035-f200968a6e72', '1517581177682-a085bb7ffb15', '1600607687939-ce8a6c25118c', '1523413651479-597eb2da0ad6'],
+  p6: ['1541888946425-d81bb19240f5', '1531834685032-c34bf0d84c77', '1416339306562-f3d12fefd36f', '1581094794329-c8112a89af12']
+};
+
+const MAP_TILES = (() => {
+  const z = 15, cx = 17942, cy = 11373, sub = ['a', 'b', 'c', 'd'];
+  const out = [];
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    out.push('https://' + sub[(dx + dy + 8) % 4] + '.basemaps.cartocdn.com/dark_all/' + z + '/' + (cx + dx) + '/' + (cy + dy) + '.png');
+  }
+  return out;
+})();
+
+const VIDEOS = [
+  'https://videos.pexels.com/video-files/10294768/10294768-sd_640_360_30fps.mp4',
+  'https://videos.pexels.com/video-files/854125/854125-sd_640_360_25fps.mp4',
+  'https://videos.pexels.com/video-files/13569683/13569683-sd_640_360_30fps.mp4'
+];
+
+const SPANS = ['grid-column: span 4; height: 460px;', 'grid-column: span 2; height: 460px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 6; height: 420px;'];
+
+const NEUTRALS = {
+  warm: { ink: '#0e0d0c', ink2: '#16110d', paper: '#f4f2ef', line: '#ddd8d1', line2: '#c9c2ba', line3: '#e6e1da', body: '#443c34', muted: '#6d645b' },
+  cool: { ink: '#0b0d10', ink2: '#12161b', paper: '#f1f3f5', line: '#d5dae0', line2: '#bfc6ce', line3: '#e3e7ec', body: '#333c46', muted: '#616b76' }
+};
+
+const PALETTES = {
+  'antracit + oranžová': { n: 'warm', h: 55, c: 0.15 },
+  'grafit + modrá': { n: 'cool', h: 250, c: 0.13 },
+  'bridlica + zelená': { n: 'cool', h: 162, c: 0.12 },
+  'uhlie + limetka': { n: 'cool', h: 125, c: 0.15 },
+  'bordó + krém': { n: 'warm', h: 14, c: 0.17, dl: -0.09 },
+  'čisto neutrálna': { n: 'warm', h: 60, c: 0.012 }
+};
+
+function palette(name) {
+  const p = PALETTES[name] || PALETTES['antracit + oranžová'];
+  const k = (l, m) => 'oklch(' + +(l + (p.dl || 0)).toFixed(3) + ' ' + +(p.c * m).toFixed(3) + ' ' + p.h + ')';
+  return Object.assign({}, NEUTRALS[p.n], {
+    a1: k(0.72, 1), a1h: k(0.82, 1), a2: k(0.78, 0.8), a3: k(0.84, 0.72), a4: k(0.62, 1), a5: k(0.55, 0.93)
+  });
+}
+
+class Component extends DCLogic {
+  state = { cat: 'Všetko', openId: null, mediaIdx: 0, sent: false, settingsOpen: false, pal: (typeof localStorage !== 'undefined' && localStorage.getItem('stavbex-palette')) || null };
+
+  rootRef = React.createRef();
+
+  applyPalette() {
+    const el = this.rootRef.current;
+    if (!el) return;
+    const t = palette(this.state.pal || this.props.palette || 'antracit + oranžová');
+    Object.keys(t).forEach(k => el.style.setProperty('--' + k, t[k]));
+  }
+
+  componentDidMount() {
+    this.applyPalette();
+    this.autoplayLoop();
+    this.onResize = () => {
+      if (this.raf) cancelAnimationFrame(this.raf);
+      this.raf = requestAnimationFrame(() => this.setState({ w: window.innerWidth }));
+    };
+    window.addEventListener('resize', this.onResize);
+    this.setState({ w: window.innerWidth });
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+  }
+  componentDidUpdate() { this.applyPalette(); this.autoplayLoop(); }
+  autoplayLoop() {
+    const el = this.heroVideo;
+    if (!el) return;
+    el.muted = true; el.loop = true; el.playsInline = true;
+    if (el.paused) { const p = el.play(); if (p && p.catch) p.catch(() => {}); }
+  }
+
+  img(id, n, w, h) {
+    const list = PHOTOS[id] || PHOTOS.p1;
+    const idx = n === 'v' ? 1 : Math.max(0, Math.min(list.length - 1, (n | 0) - 1));
+    return 'https://images.unsplash.com/photo-' + list[idx] + '?auto=format&fit=crop&w=' + w + '&h=' + h + '&q=62';
+  }
+
+  media(p, i) {
+    const photos = [1, 2, 3, 4].map(n => ({ type: 'photo', src: this.img(p.id, n, 1600, 1000), thumb: this.img(p.id, n, 320, 208) }));
+    const withVideo = (this.props.videoMode ?? 'oboje') !== 'len promo';
+    if (!withVideo) return photos;
+    return photos.concat([{ type: 'video', src: VIDEOS[i % VIDEOS.length], thumb: this.img(p.id, 'v', 320, 208) }]);
+  }
+
+  renderVals() {
+    const variant = this.props.variant ?? 'A';
+    const videoMode = this.props.videoMode ?? 'oboje';
+    const palName = this.state.pal || this.props.palette || 'antracit + oranžová';
+    const t = palette(palName);
+    const w = this.state.w || (typeof window !== 'undefined' ? window.innerWidth : 1440);
+    const narrow = w < 720, mid = w < 1080;
+    const cats = ['Všetko'].concat(PROJECTS.map(p => p.category).filter((c, i, a) => a.indexOf(c) === i));
+    const cat = this.state.cat;
+
+    const chipBase = 'font-size:11.5px;letter-spacing:0.16em;text-transform:uppercase;padding:11px 17px;border:1px solid;cursor:pointer;background:none;transition:background-color 180ms ease,color 180ms ease,border-color 180ms ease;';
+    const chips = cats.map(c => ({
+      label: c,
+      style: chipBase + (c === cat ? 'background:' + t.ink2 + ';color:' + t.paper + ';border-color:' + t.ink2 + ';' : 'color:' + t.muted + ';border-color:' + t.line2 + ';'),
+      onClick: () => this.setState({ cat: c })
+    }));
+
+    const list = PROJECTS.filter(p => cat === 'Všetko' || p.category === cat);
+    const perProjectVideo = videoMode !== 'len promo';
+    const visible = list.map((p, i) => ({
+      ...p,
+      cover: this.img(p.id, 1, 900, 620),
+      mediaLabel: perProjectVideo ? '4 foto · video' : '4 foto',
+      spanStyle: (narrow ? 'grid-column: span 6; height: 62vw; max-height: 340px;' : mid ? 'grid-column: span 3; height: 300px;' : SPANS[i % SPANS.length]) + 'cursor:pointer;',
+      open: () => this.setState({ openId: p.id, mediaIdx: 0 })
+    }));
+
+    const detailIdx = PROJECTS.findIndex(p => p.id === this.state.openId);
+    const detail = detailIdx >= 0 ? PROJECTS[detailIdx] : null;
+    let detailMedia = [], activeImage = null, current = null;
+    if (detail) {
+      const items = this.media(detail, detailIdx);
+      current = items[Math.min(this.state.mediaIdx, items.length - 1)];
+      activeImage = current.type === 'photo' ? current.src : null;
+      detailMedia = items.map((m, i) => ({
+        thumb: m.thumb,
+        isVideo: m.type === 'video',
+        select: () => this.setState({ mediaIdx: i }),
+        style: 'position:relative;width:118px;height:76px;padding:0;border:2px solid ' + (i === this.state.mediaIdx ? t.a1 : 'transparent') + ';background:#000;cursor:pointer;overflow:hidden;'
+      }));
+    }
+
+    return {
+      t,
+      yes: true,
+      tiles: MAP_TILES,
+      rootRef: this.rootRef,
+      settingsOpen: !!this.state.settingsOpen,
+      toggleSettings: () => this.setState(s => ({ settingsOpen: !s.settingsOpen })),
+      closeSettings: () => this.setState({ settingsOpen: false }),
+      palettes: Object.keys(PALETTES).map(name => {
+        const pp = palette(name), on = name === palName;
+        return {
+          name, accent: pp.a1, ink: pp.ink2,
+          rowStyle: 'display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;cursor:pointer;text-align:left;background:' + (on ? 'rgba(255,255,255,0.1)' : 'transparent') + ';border:1px solid ' + (on ? 'rgba(255,255,255,0.34)' : 'rgba(255,255,255,0.12)') + ';color:' + (on ? '#fff' : 'rgba(255,255,255,0.72)') + ';font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;transition:background-color 180ms ease,border-color 180ms ease,color 180ms ease;',
+          dotStyle: 'width:20px;height:20px;flex:none;background:' + pp.a1 + ';box-shadow:inset 0 0 0 1px rgba(255,255,255,0.25);',
+          onClick: () => { try { localStorage.setItem('stavbex-palette', name); } catch (e) {} this.setState({ pal: name }); }
+        };
+      }),
+      narrow, wide: !narrow,
+      statsCols: w < 940 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+      menuOpen: narrow && !!this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      promoIdle: !this.state.promoPlaying,
+      promoRef: (el) => { this.promo = el; },
+      playPromo: () => {
+        this.setState({ promoPlaying: true });
+        if (this.promo) { const p = this.promo.play(); if (p && p.catch) p.catch(() => {}); }
+      },
+      heroRef: (el) => { this.heroVideo = el; if (el) this.autoplayLoop(); },
+      isA: variant === 'A', isB: variant === 'B',
+      showPromo: videoMode !== 'len v projektoch',
+      chips, visible,
+      services: [
+        { num: '01', title: 'Hrubé stavby a murárske práce', text: 'Základy, murivo, stropy, preklady a krov. Preberáme stavbu od výkopu po strechu s jedným zodpovedným stavbyvedúcim.' },
+        { num: '02', title: 'Rekonštrukcie bytov a domov', text: 'Búracie práce, nové rozvody, podlahy a finálne povrchy. Byt odovzdávame obývateľný a uklidnený.' },
+        { num: '03', title: 'Fasády a zatepľovanie', text: 'Systémy ETICS, obnova balkónov a klampiarske prvky. Realizujeme aj bytové domy z lešenia počas obývanosti.' },
+        { num: '04', title: 'Interiéry a sadrokartón', text: 'Priečky, akustické a kazetové podhľady, stierky a malby vrátane prípravy pre elektro a vzduchotechniku.' },
+        { num: '05', title: 'Kúpeľne, obklady a dlažby', text: 'Veľkoformátové obklady podľa kladačského plánu, murované sprchy so spádom a podlahové vykurovanie.' },
+        { num: '06', title: 'Cenová ponuka a rozpočet', text: 'Ponuku dostanete rozpísanú po položkách s mernými jednotkami a harmonogramom pred podpisom zmluvy.' }
+      ],
+      facts: [
+        { k: 'Založená', v: '2008, Bratislava' }, { k: 'Vlastné partie', v: '6 (murári, obkladači, SDK)' },
+        { k: 'Pôsobnosť', v: 'Bratislava a okolie do 60 km' }, { k: 'Záruka', v: '5 rokov na vykonané dielo' }
+      ],
+      hasDetail: !!detail, detail,
+      detailShowsVideo: !!current && current.type === 'video',
+      detailShowsPhoto: !!current && current.type === 'photo',
+      activeImage, detailMedia,
+      activeVideo: current && current.type === 'video' ? current.src : null,
+      detailCover: detail ? this.img(detail.id, 1, 1200, 750) : null,
+      detailSpecs: detail ? detail.specs.map(s => ({ k: s[0], v: s[1] })) : [],
+      close: () => this.setState({ openId: null }),
+      sent: this.state.sent, notSent: !this.state.sent,
+      send: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ sent: true }); },
+      reset: () => this.setState({ sent: false })
+    };
+  }
+}
+
+</script>
+</body>
+</html>
