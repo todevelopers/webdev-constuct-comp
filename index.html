@@ -379,7 +379,7 @@
           <button onClick="{{ close }}" style="position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; background: rgba(14,13,12,0.7); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;" style-hover="background:var(--a1);color:var(--ink2)">×</button>
         </div>
         <div style="{{ mediaStripStyle }}">
-          <sc-for list="{{ detailMedia }}" as="m" hint-placeholder-count="5">
+          <sc-for list="{{ detailMedia }}" as="m" hint-placeholder-count="10">
             <button onClick="{{ m.select }}" style="{{ m.style }}">
               <img src="{{ m.thumb }}" alt="Náhľad" style="{{ m.imgStyle }}">
               <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}">
@@ -447,12 +447,18 @@ const PROJECTS = [
 ];
 
 const PHOTOS = {
-  p1: ['1504307651254-35680f356dfd', '1503387837-b154d5074bd2', '1487958449943-2429e8be8625', '1503174971373-b1f69850bded'],
-  p2: ['1600566752355-35792bedcfea', '1600607687939-ce8a6c25118c', '1600585154340-be6161a56a0c', '1605276374104-dee2a0ed3cd6'],
-  p3: ['1486406146926-c627a92ad1ab', '1621905251189-08b45d6a269e', '1621905252507-b35492cc74b4', '1531834685032-c34bf0d84c77'],
-  p4: ['1620626011761-996317b8d101', '1600566753190-17f0baa2a6c3', '1600585154340-be6161a56a0c', '1517581177682-a085bb7ffb15'],
-  p5: ['1497366754035-f200968a6e72', '1517581177682-a085bb7ffb15', '1600607687939-ce8a6c25118c', '1523413651479-597eb2da0ad6'],
-  p6: ['1541888946425-d81bb19240f5', '1531834685032-c34bf0d84c77', '1416339306562-f3d12fefd36f', '1581094794329-c8112a89af12']
+  p1: ['1504307651254-35680f356dfd', '1503387837-b154d5074bd2', '1487958449943-2429e8be8625', '1503174971373-b1f69850bded',
+       '1523413651479-597eb2da0ad6', '1590486803833-1c5dc8ddd4c8', '1416339306562-f3d12fefd36f', '1581094794329-c8112a89af12'],
+  p2: ['1600566752355-35792bedcfea', '1600607687939-ce8a6c25118c', '1600585154340-be6161a56a0c', '1605276374104-dee2a0ed3cd6',
+       '1600566753190-17f0baa2a6c3', '1517581177682-a085bb7ffb15', '1558618666-fcd25c85cd64', '1620626011761-996317b8d101'],
+  p3: ['1486406146926-c627a92ad1ab', '1621905251189-08b45d6a269e', '1621905252507-b35492cc74b4', '1531834685032-c34bf0d84c77',
+       '1504307651254-35680f356dfd', '1416339306562-f3d12fefd36f', '1590486803833-1c5dc8ddd4c8', '1503174971373-b1f69850bded'],
+  p4: ['1620626011761-996317b8d101', '1600566753190-17f0baa2a6c3', '1600585154340-be6161a56a0c', '1517581177682-a085bb7ffb15',
+       '1600566752355-35792bedcfea', '1605276374104-dee2a0ed3cd6', '1600607687939-ce8a6c25118c', '1558618666-fcd25c85cd64'],
+  p5: ['1497366754035-f200968a6e72', '1517581177682-a085bb7ffb15', '1600607687939-ce8a6c25118c', '1523413651479-597eb2da0ad6',
+       '1487958449943-2429e8be8625', '1590486803833-1c5dc8ddd4c8', '1558618666-fcd25c85cd64', '1600585154340-be6161a56a0c'],
+  p6: ['1541888946425-d81bb19240f5', '1531834685032-c34bf0d84c77', '1416339306562-f3d12fefd36f', '1581094794329-c8112a89af12',
+       '1503387837-b154d5074bd2', '1504307651254-35680f356dfd', '1523413651479-597eb2da0ad6', '1486406146926-c627a92ad1ab']
 };
 
 const MAP_TILES = (() => {
@@ -469,6 +475,13 @@ const VIDEOS = [
   'https://videos.pexels.com/video-files/854125/854125-sd_640_360_25fps.mp4',
   'https://videos.pexels.com/video-files/13569683/13569683-sd_640_360_30fps.mp4'
 ];
+
+const VIDEOS_PER_PROJECT = 2;
+
+const photoCount = (id) => (PHOTOS[id] || PHOTOS.p1).length;
+
+// 1 foto / 2 – 4 fotky / 5+ fotiek
+const plural = (n, one, few, many) => n + ' ' + (n === 1 ? one : n < 5 ? few : many);
 
 const SPANS = ['grid-column: span 4; height: 460px;', 'grid-column: span 2; height: 460px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 2; height: 400px;', 'grid-column: span 6; height: 420px;'];
 
@@ -534,10 +547,13 @@ class Component extends DCLogic {
   }
 
   media(p, i) {
-    const photos = [1, 2, 3, 4].map(n => ({ type: 'photo', src: this.img(p.id, n, 1600, 1000), thumb: this.img(p.id, n, 320, 208) }));
+    const photos = [];
+    for (let n = 1; n <= photoCount(p.id); n++) photos.push({ type: 'photo', src: this.img(p.id, n, 1600, 1000), thumb: this.img(p.id, n, 320, 208) });
     const withVideo = (this.props.videoMode ?? 'oboje') !== 'len promo';
     if (!withVideo) return photos;
-    return photos.concat([{ type: 'video', src: VIDEOS[i % VIDEOS.length], thumb: this.img(p.id, 'v', 320, 208) }]);
+    const videos = [];
+    for (let k = 0; k < VIDEOS_PER_PROJECT; k++) videos.push({ type: 'video', src: VIDEOS[(i + k) % VIDEOS.length], thumb: this.img(p.id, 2 + k, 320, 208) });
+    return photos.concat(videos);
   }
 
   renderVals() {
@@ -562,7 +578,8 @@ class Component extends DCLogic {
     const visible = list.map((p, i) => ({
       ...p,
       cover: this.img(p.id, 1, 900, 620),
-      mediaLabel: perProjectVideo ? '4 foto · video' : '4 foto',
+      mediaLabel: plural(photoCount(p.id), 'foto', 'fotky', 'fotiek')
+        + (perProjectVideo ? ' · ' + plural(VIDEOS_PER_PROJECT, 'video', 'videá', 'videí') : ''),
       spanStyle: (narrow ? 'grid-column: span 6; height: 62vw; max-height: 340px;' : mid ? 'grid-column: span 3; height: 300px;' : SPANS[i % SPANS.length]) + 'cursor:pointer;',
       open: () => this.setState({ openId: p.id, mediaIdx: 0 })
     }));
@@ -579,7 +596,7 @@ class Component extends DCLogic {
         isVideo: m.type === 'video',
         select: () => this.setState({ mediaIdx: i }),
         style: 'position:relative;padding:0;border:2px solid ' + (i === this.state.mediaIdx ? t.a1 : 'transparent') + ';background:#000;cursor:pointer;overflow:hidden;'
-          + (narrow ? 'flex:1 1 0;min-width:0;aspect-ratio:320/208;' : 'flex:none;width:118px;height:76px;'),
+          + (narrow ? 'flex:1 0 auto;width:22%;min-width:74px;aspect-ratio:320/208;scroll-snap-align:start;' : 'flex:none;width:118px;height:76px;'),
         imgStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;'
       }));
     }
@@ -634,7 +651,7 @@ class Component extends DCLogic {
       activeImage, detailMedia,
       mediaStripStyle: 'display:flex;background:' + t.ink2 + ';'
         + (narrow
-          ? 'gap:6px;padding:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;'
+          ? 'gap:6px;padding:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scrollbar-width:thin;'
           : 'gap:10px;padding:12px;flex-wrap:wrap;'),
       videoBadgeStyle: 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,13,12,0.45);color:#fff;text-transform:uppercase;'
         + (narrow ? 'font-size:9px;letter-spacing:0.06em;' : 'font-size:11px;letter-spacing:0.14em;'),
