@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout
+  title="Stránka sa nenašla"
+  description="Požadovaná stránka neexistuje alebo bola presunutá."
+  noindex
+>
+  <SiteHeader />
+
+  <main id="obsah" class="page">
+    <div class="wrap inner">
+      <p class="eyebrow">Chyba 404</p>
+      <h1 class="title">Stránka sa nenašla</h1>
+      <p class="lead text">
+        Odkaz je pravdepodobne zastaraný alebo obsahuje preklep. Skúste prejsť na
+        úvodnú stránku alebo si prezrieť naše realizácie.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn--solid" href="/">Späť na úvod</a>
+        <a class="btn btn--outline" href="/#kontakt">Kontakt</a>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .page {
+    background: var(--paper);
+  }
+
+  .inner {
+    padding-block: clamp(4rem, 12vw, 8rem);
+    max-width: 60ch;
+  }
+
+  .title {
+    font-size: var(--fs-h2);
+    margin-top: 0.75rem;
+    color: var(--ink2);
+  }
+
+  .text {
+    margin-top: 1.25rem;
+    color: var(--body);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-top: 2.5rem;
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import { SERVICES } from '../data/services';
+---
+
+<section class="section section--dark" id="sluzby">
+  <div class="wrap">
+    <p class="eyebrow">Služby</p>
+    <h2 class="section-title">Čo pre vás robíme</h2>
+
+    <ul class="grid">
+      {
+        SERVICES.map((s) => (
+          <li class="item">
+            <span class="item__num">{s.num}</span>
+            <h3 class="item__title">{s.title}</h3>
+            <p class="item__text">{s.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: 1px;
+    margin: 3rem 0 0;
+    padding: 0;
+    list-style: none;
+    /* Hairline mriežka: pozadie presvitá cez 1px medzery medzi bunkami. */
+    background: var(--hairline-dark);
+  }
+
+  .item {
+    background: var(--ink);
+    padding: 2.125rem 1.875rem 2.375rem;
+    transition: background-color var(--transition);
+  }
+
+  .item:hover {
+    background: var(--ink2);
+  }
+
+  .item__num {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    color: var(--a2);
+  }
+
+  .item__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.6875rem;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    margin-top: 0.875rem;
+  }
+
+  .item__text {
+    margin-top: 0.75rem;
+    font-size: 0.97rem;
+    line-height: 1.6;
+    color: var(--on-dark-65);
+  }
+</style>

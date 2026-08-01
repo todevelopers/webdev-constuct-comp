@@ -1,0 +1,294 @@
+---
+/**
+ * Detail realizácie — vlastná URL pre každý projekt.
+ *
+ * Toto je hlavný SEO prínos oproti pôvodnému modálnemu oknu: každá realizácia
+ * má indexovateľnú stránku s nadpisom, textom, fotkami a štruktúrovanými
+ * dátami, na ktorú sa dá odkazovať.
+ */
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { SITE } from '../../data/site';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { title, category, year, place, area, summary, cover, gallery, scope, specs } = project.data;
+
+// Popis realizácie z tela markdownu; ak chýba, stránka stále dáva zmysel.
+const { Content } = await render(project);
+
+const images = [cover, ...gallery];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: title,
+  description: summary,
+  dateCreated: String(year),
+  locationCreated: { '@type': 'Place', name: place },
+  image: new URL(cover.src, SITE.url).href,
+  creator: { '@id': `${SITE.url}/#organizacia` },
+};
+
+const breadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Domov', item: `${SITE.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'Realizácie', item: `${SITE.url}/#realizacie` },
+    { '@type': 'ListItem', position: 3, name: title },
+  ],
+};
+---
+
+<BaseLayout title={title} description={summary} ogImage={cover.src}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbs)} is:inline />
+  </Fragment>
+
+  <SiteHeader />
+
+  <main id="obsah">
+    <article>
+      <header class="head">
+        <div class="wrap">
+          <nav class="crumbs" aria-label="Omrvinková navigácia">
+            <a href="/">Domov</a>
+            <span aria-hidden="true">/</span>
+            <a href="/#realizacie">Realizácie</a>
+          </nav>
+
+          <p class="head__meta">{category} · {year} · {place} · {area}</p>
+          <h1 class="head__title">{title}</h1>
+          <p class="head__summary">{summary}</p>
+        </div>
+      </header>
+
+      <div class="wrap body">
+        <div class="gallery">
+          {
+            images.map((img, i) => (
+              <Image
+                class="gallery__img"
+                src={img}
+                alt={`${title} — fotografia ${i + 1}`}
+                widths={[600, 1000, 1400]}
+                sizes="(min-width: 62rem) 60vw, 100vw"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            ))
+          }
+        </div>
+
+        <div class="cols">
+          <div class="prose">
+            <Content />
+
+            {
+              scope.length > 0 && (
+                <>
+                  <h2 class="prose__h2">Rozsah prác</h2>
+                  <ul class="scope">
+                    {scope.map((s) => (
+                      <li class="scope__item">{s}</li>
+                    ))}
+                  </ul>
+                </>
+              )
+            }
+          </div>
+
+          <aside class="side">
+            {/* Kategória, rok, lokalita a rozmer sú v hlavičke — tabuľka nesie
+                len to, čo je špecifické pre danú realizáciu, aby sa tie isté
+                údaje neuvádzali dvakrát a nemohli sa rozísť. */}
+            <dl class="specs">
+              {
+                specs.map((s) => (
+                  <div class="specs__row">
+                    <dt class="specs__key">{s.k}</dt>
+                    <dd class="specs__val">{s.v}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <a class="btn btn--solid specs__cta" href="/#ponuka">Chcem podobnú realizáciu</a>
+          </aside>
+        </div>
+
+        <p class="back"><a href="/#realizacie">← Späť na všetky realizácie</a></p>
+      </div>
+    </article>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .head {
+    background: var(--ink2);
+    color: var(--on-dark);
+    padding-block: clamp(2.5rem, 6vw, 4rem) clamp(2rem, 5vw, 3rem);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-dark-45);
+    margin-bottom: 1.75rem;
+  }
+
+  .crumbs a {
+    color: var(--on-dark-45);
+  }
+
+  .crumbs a:hover {
+    color: var(--a1);
+  }
+
+  .head__meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--a2);
+  }
+
+  .head__title {
+    font-size: var(--fs-h3);
+    margin-top: 0.75rem;
+  }
+
+  .head__summary {
+    margin-top: 1.25rem;
+    max-width: 60ch;
+    font-size: var(--fs-lead);
+    line-height: 1.62;
+    color: var(--on-dark-80);
+  }
+
+  .body {
+    padding-block: clamp(2.5rem, 6vw, 4rem) var(--section-y);
+  }
+
+  .gallery {
+    display: grid;
+    gap: clamp(0.625rem, 1.5vw, 1.25rem);
+  }
+
+  .gallery :global(.gallery__img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  @media (min-width: 48rem) {
+    .gallery {
+      grid-template-columns: 1fr 1fr;
+    }
+    /* Prvá fotka je titulná — dostane celú šírku. */
+    .gallery :global(.gallery__img:first-child) {
+      grid-column: span 2;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: clamp(2rem, 4vw, 3.5rem);
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    align-items: start;
+  }
+
+  .prose {
+    font-size: 1.06rem;
+    line-height: 1.7;
+    color: var(--body);
+  }
+
+  .prose :global(p) {
+    margin-bottom: 1.125rem;
+  }
+
+  .prose__h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    color: var(--ink2);
+  }
+
+  .scope {
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .scope__item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+    font-size: 1rem;
+  }
+
+  .scope__item::before {
+    content: '';
+    flex: none;
+    width: 6px;
+    height: 6px;
+    background: var(--a4);
+  }
+
+  .side {
+    border: 1px solid var(--line);
+  }
+
+  .specs {
+    margin: 0;
+  }
+
+  .specs__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9375rem 1.25rem;
+    border-bottom: 1px solid var(--line3);
+    font-size: 0.97rem;
+  }
+
+  .specs__key {
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .specs__val {
+    margin: 0;
+    text-align: right;
+    font-weight: 500;
+    color: var(--ink2);
+  }
+
+  .specs__cta {
+    width: 100%;
+    padding: 1.0625rem;
+    font-size: 0.78rem;
+  }
+
+  .back {
+    margin-top: 3rem;
+    font-size: 0.95rem;
+  }
+</style>

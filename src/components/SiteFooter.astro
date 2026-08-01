@@ -1,0 +1,67 @@
+---
+import { SITE, CONTACT } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <span class="foot__brand">{SITE.name}</span>
+
+    <p class="foot__contact">
+      <a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a>
+      <span class="foot__sep">·</span>
+      <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+    </p>
+
+    <span class="foot__legal">© {year} {SITE.name} · IČO {CONTACT.ico}</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--ink);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .foot__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-block: 1.75rem;
+  }
+
+  .foot__brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--on-dark);
+  }
+
+  .foot__contact {
+    font-size: 0.9rem;
+    color: var(--on-dark-65);
+  }
+
+  .foot__contact a {
+    color: var(--on-dark-80);
+  }
+
+  .foot__contact a:hover {
+    color: var(--a1);
+  }
+
+  .foot__sep {
+    margin-inline: 0.5rem;
+    opacity: 0.5;
+  }
+
+  .foot__legal {
+    font-size: 0.81rem;
+    color: var(--on-dark-45);
+  }
+</style>

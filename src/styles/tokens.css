@@ -1,0 +1,73 @@
+/*
+ * Design tokens — jediné miesto, kde sa mení vzhľad webu.
+ *
+ * Akcentová farba je zapísaná v OKLCH: `L C H`. Zmenou jediného čísla H
+ * (odtieň, 0–360) prefarbíš celý web a zachováš rovnaký kontrast, lebo L
+ * (svetlosť) zostáva. Pôvodná paleta = antracit + oranžová (H 55).
+ *
+ * Príklady: modrá H 250 · zelená H 162 · limetka H 125 · bordó H 14
+ */
+:root {
+  /* ---- Akcent -------------------------------------------------------- */
+  --accent-h: 55;
+  --accent-c: 0.15;
+
+  /** Hlavný akcent na tmavom pozadí (tlačidlá, čísla). */
+  --a1: oklch(0.72 var(--accent-c) var(--accent-h));
+  /** Hover stav --a1. */
+  --a1h: oklch(0.82 var(--accent-c) var(--accent-h));
+  /** Jemnejší akcent pre popisky na tmavom. */
+  --a2: oklch(0.78 calc(var(--accent-c) * 0.8) var(--accent-h));
+  /** Najjemnejší akcent — metadáta na fotkách. */
+  --a3: oklch(0.84 calc(var(--accent-c) * 0.72) var(--accent-h));
+  /** Akcent na svetlom pozadí (odkazy) — tmavší kvôli kontrastu. */
+  --a4: oklch(0.62 var(--accent-c) var(--accent-h));
+  /** Popisky sekcií na svetlom pozadí. */
+  --a5: oklch(0.55 calc(var(--accent-c) * 0.93) var(--accent-h));
+
+  /* ---- Neutrály ------------------------------------------------------ */
+  --ink: #0e0d0c; /* najtmavšie pozadie */
+  --ink2: #16110d; /* tmavé pozadie sekcií + text na svetlom */
+  --paper: #f4f2ef; /* svetlé pozadie */
+  --line: #ddd8d1;
+  --line2: #c9c2ba;
+  --line3: #e6e1da;
+  --body: #443c34; /* bežný text */
+  --muted: #6d645b; /* popisky, metadáta */
+
+  /* Prekryvy na tmavom pozadí — pomenované, nie roztrúsené rgba(). */
+  --on-dark: #fff;
+  --on-dark-80: rgba(255, 255, 255, 0.8);
+  --on-dark-65: rgba(255, 255, 255, 0.65);
+  --on-dark-45: rgba(255, 255, 255, 0.45);
+  --hairline-dark: rgba(255, 255, 255, 0.14);
+  --hairline-dark-soft: rgba(255, 255, 255, 0.08);
+
+  /* ---- Typografia ---------------------------------------------------- */
+  --font-display: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --tracking-label: 0.16em; /* verzálkové popisky */
+  --tracking-eyebrow: 0.24em; /* nadpisové „očká“ nad H2 */
+
+  /* Fluidná mierka — clamp(min, ideál, max), bez media queries. */
+  --fs-h1: clamp(2.6rem, 7vw, 6.5rem);
+  --fs-h2: clamp(2.1rem, 5.4vw, 3.9rem);
+  --fs-h3: clamp(1.9rem, 4.6vw, 3.25rem);
+  --fs-card-title: clamp(1.5rem, 2.4vw, 1.8rem);
+  --fs-lead: clamp(1.05rem, 1.4vw, 1.19rem);
+
+  /* ---- Priestor a rozmery -------------------------------------------- */
+  --wrap: 1320px; /* max. šírka obsahu */
+  --gutter: clamp(1rem, 4vw, 2rem); /* bočný okraj */
+  --section-y: clamp(4rem, 10vw, 6.25rem); /* vertikálny rytmus sekcií */
+
+  /* Výšku sticky hlavičky zapisuje Header.astro; fallback drží kotvy
+     použiteľné aj predtým, než sa skript spustí. */
+  --hdr: 77px;
+
+  --transition: 180ms ease;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --z-header: 40;
+  --z-dialog: 60;
+}

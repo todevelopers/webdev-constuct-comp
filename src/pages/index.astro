@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LocalBusinessJsonLd from '../components/LocalBusinessJsonLd.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Hero from '../components/Hero.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import Services from '../components/Services.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../data/site';
+
+// Rozpracované realizácie sa nikam nedostanú — ani na stránku, ani do sitemap.
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order || b.data.year - a.data.year,
+);
+---
+
+<BaseLayout
+  title={`${SITE.name} — ${SITE.tagline}`}
+  description={SITE.description}
+>
+  <LocalBusinessJsonLd slot="head" />
+
+  <SiteHeader />
+  <main id="obsah">
+    <Hero />
+    <ProjectGrid projects={projects} />
+    <Services />
+    <About />
+    <Contact />
+    <QuoteForm />
+  </main>
+  <SiteFooter />
+</BaseLayout>

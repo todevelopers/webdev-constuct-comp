@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import { SITE } from '../data/site';
+import { FACTS } from '../data/services';
+import photoWide from '../assets/site/onas-01.jpg';
+import photoA from '../assets/site/onas-02.jpg';
+import photoB from '../assets/site/onas-03.jpg';
+---
+
+<section class="section section--paper" id="onas">
+  <div class="wrap cols">
+    <div>
+      <p class="eyebrow">O firme</p>
+      <h2 class="section-title">{SITE.name}</h2>
+
+      <p class="lead intro">
+        Sme stavebná firma z Bratislavy, ktorá od roku {SITE.founded} realizuje hrubé
+        stavby, kompletné rekonštrukcie bytov a domov, fasády a interiéry.
+        Nepracujeme cez sprostredkovateľov — murárske, obkladačské a sadrokartónové
+        práce vykonávame vlastnými partiami.
+      </p>
+      <p class="secondary">
+        Každú zákazku vediete s jedným stavbyvedúcim, ktorý je zodpovedný za
+        harmonogram, preberanie materiálu aj koordináciu profesií. Cenovú ponuku
+        dostanete rozpísanú po položkách vrátane merných jednotiek, takže viete
+        presne, za čo platíte.
+      </p>
+
+      <dl class="facts">
+        {
+          FACTS.map((f) => (
+            <div class="facts__item">
+              <dt class="facts__key">{f.k}</dt>
+              <dd class="facts__val">{f.v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="photos">
+      <Image
+        class="photos__wide"
+        src={photoWide}
+        alt="Stavenisko počas realizácie"
+        widths={[600, 900]}
+        sizes="(min-width: 62rem) 45vw, 100vw"
+        loading="lazy"
+      />
+      <Image src={photoA} alt="Detail murárskych prác" widths={[400, 600]} loading="lazy" />
+      <Image src={photoB} alt="Detail dokončovacích prác" widths={[400, 600]} loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+    gap: clamp(2.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+
+  .intro {
+    margin-top: 1.625rem;
+    color: var(--body);
+  }
+
+  .secondary {
+    margin-top: 1.125rem;
+    font-size: 1.03rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 1px;
+    margin: 2.5rem 0 0;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .facts__item {
+    background: var(--paper);
+    padding: 1.375rem 1.5rem;
+  }
+
+  .facts__key {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .facts__val {
+    margin: 0.375rem 0 0;
+    font-size: 1.03rem;
+    font-weight: 500;
+    color: var(--ink2);
+  }
+
+  .photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .photos :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photos__wide {
+    grid-column: span 2;
+    aspect-ratio: 3 / 2;
+  }
+
+  .photos :global(img:not(.photos__wide)) {
+    aspect-ratio: 4 / 3;
+  }
+</style>
