@@ -13,6 +13,9 @@ npm run preview  # lokálne overenie produkčného buildu
 npm run check    # typová kontrola (.astro + .ts)
 ```
 
+> Tento súbor je návod pre človeka. Pravidlá a pasce projektu pre AI agenta sú
+> v `CLAUDE.md` — zámerne obsahuje niečo iné, nie to isté inými slovami.
+
 ---
 
 ## Čo kde je
