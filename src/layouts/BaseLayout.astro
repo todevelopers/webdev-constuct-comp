@@ -6,6 +6,7 @@
  * vynúti, takže stránka bez popisu sa nedá vytvoriť omylom.
  */
 import { SITE } from '../data/site';
+import { withBase, isProductionDeploy } from '../lib/url';
 import ogDefault from '../assets/site/og-default.jpg';
 import '../styles/global.css';
 
@@ -32,8 +33,14 @@ const { title, description, ogImage, noindex = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(ogImage ?? ogDefault.src, Astro.site).href;
+
+// Porovnávame voči `withBase('/')`, nie voči '/', lebo pri nasadení do
+// podadresára je domovská stránka na /<podadresar>/, nie v koreni.
+const trim = (p: string) => p.replace(/\/+$/, '');
+const isHome = trim(Astro.url.pathname) === trim(withBase('/'));
+
 /** Domovská stránka má názov firmy prvý, podstránky svoj vlastný titulok. */
-const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
+const fullTitle = isHome ? title : `${title} | ${SITE.name}`;
 ---
 
 <!doctype html>
@@ -44,7 +51,11 @@ const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {
+      /* Testovacie nasadenie sa nikdy nesmie dostať do indexu — inak by
+         konkurovalo ostrému webu duplicitným obsahom. */
+      (noindex || !isProductionDeploy()) && <meta name="robots" content="noindex, follow" />
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />
@@ -62,8 +73,8 @@ const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`
     }
 
     <meta name="theme-color" content="#0e0d0c" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <slot name="head" />
   </head>

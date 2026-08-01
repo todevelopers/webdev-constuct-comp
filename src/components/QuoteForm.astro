@@ -13,10 +13,13 @@
  * Obidve vyhodnocuje až príjemca (Formspree, Netlify alebo vlastný backend).
  */
 import { FORM, SITE } from '../data/site';
+import { withBase } from '../lib/url';
 import { SERVICES, QUOTE_PROMISES } from '../data/services';
 
 const configured = FORM.provider === 'netlify' || FORM.action.length > 0;
 const action = FORM.provider === 'netlify' ? undefined : FORM.action || undefined;
+/** Absolútna URL ďakovnej stránky — musí sedieť aj pri nasadení do podadresára. */
+const successUrl = new URL(withBase(FORM.successPath), Astro.site).href;
 ---
 
 <section class="section section--paper divider" id="ponuka">
@@ -55,7 +58,7 @@ const action = FORM.provider === 'netlify' ? undefined : FORM.action || undefine
         data-form
       >
         {/* Formspree: kam presmerovať po odoslaní + predmet e-mailu. */}
-        <input type="hidden" name="_redirect" value={new URL(FORM.successPath, SITE.url).href} />
+        <input type="hidden" name="_redirect" value={successUrl} />
         <input type="hidden" name="_subject" value={`Nový dopyt z webu ${SITE.name}`} />
         {/* Vyplní skript; prázdna hodnota = používateľ bez JS, nevyhodnocuje sa. */}
         <input type="hidden" name="nacitane" data-loaded-at value="" />

@@ -3,9 +3,22 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { SITE } from './src/data/site.ts';
 
+/**
+ * Adresa a podadresár sa dajú prebiť premennými prostredia, aby ten istý kód
+ * fungoval na testovacích GitHub Pages (web beží v podadresári) aj na ostrej
+ * doméne (web beží v koreni) bez editovania súborov.
+ *
+ *   testovací build:  SITE_URL=https://todevelopers.github.io \
+ *                     BASE_PATH=/webdev-constuct-comp npm run build
+ *   ostrý build:      npm run build          (vezme hodnoty zo src/data/site.ts)
+ */
+const site = process.env.SITE_URL || SITE.url;
+const base = process.env.BASE_PATH || '/';
+
 export default defineConfig({
   // `site` je povinné pre sitemap.xml, kanonické URL a absolútne OG obrázky.
-  site: SITE.url,
+  site,
+  base,
   trailingSlash: 'always',
   integrations: [sitemap({ lastmod: new Date() })],
   build: {

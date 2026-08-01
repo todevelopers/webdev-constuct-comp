@@ -1,0 +1,59 @@
+name: Nasadenie na GitHub Pages
+
+# Testovacie nasadenie vetvy, na ktorej sa vyvíja. Po zlúčení do main stačí
+# do `branches` doplniť `main` (alebo tento riadok nahradiť).
+on:
+  push:
+    branches:
+      - claude/css-support-js-compilation-yzi7gi
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Súbežné nasadenia sa nemajú prebíjať; rozbehnutý build necháme dobehnúť.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` (nie `install`) — inštaluje presne to, čo je v package-lock.json,
+      # takže build v CI zodpovedá tomu lokálnemu.
+      - run: npm ci
+
+      - name: Typová kontrola
+        run: npm run check
+
+      - name: Build
+        env:
+          # Project Pages bežia v podadresári podľa názvu repozitára. Bez toho
+          # by všetky odkazy, CSS aj obrázky ukazovali do koreňa domény.
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          BASE_PATH: /${{ github.event.repository.name }}
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

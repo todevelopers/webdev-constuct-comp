@@ -7,21 +7,25 @@
  * Údaje sa berú zo `site.ts`, takže nemôžu rozísť s tým, čo je na stránke.
  */
 import { SITE, CONTACT, SOCIAL } from '../data/site';
+import { withBase } from '../lib/url';
 import ogDefault from '../assets/site/og-default.jpg';
 
 const sameAs = [SOCIAL.facebook, SOCIAL.instagram, SOCIAL.googleBusiness].filter(Boolean);
 
+/** Skutočná adresa webu — rešpektuje doménu aj prípadný podadresár. */
+const home = new URL(withBase('/'), Astro.site).href;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'GeneralContractor',
-  '@id': `${SITE.url}/#organizacia`,
+  '@id': `${home}#organizacia`,
   name: SITE.name,
   description: SITE.description,
-  url: SITE.url,
+  url: home,
   telephone: CONTACT.phoneHref,
   email: CONTACT.email,
   foundingDate: String(SITE.founded),
-  image: new URL(ogDefault.src, SITE.url).href,
+  image: new URL(ogDefault.src, Astro.site).href,
   address: {
     '@type': 'PostalAddress',
     streetAddress: CONTACT.address.street,

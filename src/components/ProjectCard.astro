@@ -9,6 +9,7 @@
  */
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -23,7 +24,7 @@ const photoCount = gallery.length + 1;
 
 <a
   class:list={['card', wide && 'card--wide']}
-  href={`/realizacie/${project.id}/`}
+  href={withBase(`/realizacie/${project.id}/`)}
   data-category={category}
 >
   <div class="card__media">

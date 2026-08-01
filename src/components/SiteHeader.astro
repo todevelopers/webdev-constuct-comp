@@ -7,18 +7,19 @@
  * Skript len meria výšku panelu do --hdr, aby kotvy nekončili pod ním.
  */
 import { SITE, NAV } from '../data/site';
+import { withBase } from '../lib/url';
 ---
 
 <header class="hdr" data-header>
   <div class="hdr__bar wrap" data-header-bar>
-    <a class="brand" href="/">
+    <a class="brand" href={withBase('/')}>
       <span class="brand__name">{SITE.shortName}</span>
       <span class="brand__suffix">s.r.o.</span>
     </a>
 
     <nav class="nav" aria-label="Hlavná navigácia">
-      {NAV.map((item) => <a class="nav__link" href={item.href}>{item.label}</a>)}
-      <a class="btn btn--primary nav__cta" href="/#ponuka">Cenová ponuka</a>
+      {NAV.map((item) => <a class="nav__link" href={withBase(item.href)}>{item.label}</a>)}
+      <a class="btn btn--primary nav__cta" href={withBase('/#ponuka')}>Cenová ponuka</a>
     </nav>
 
     <details class="menu" data-menu>
@@ -28,8 +29,8 @@ import { SITE, NAV } from '../data/site';
         <span class="menu__bar"></span>
       </summary>
       <div class="menu__panel">
-        {NAV.map((item) => <a class="menu__link" href={item.href}>{item.label}</a>)}
-        <a class="menu__link menu__link--cta" href="/#ponuka">Cenová ponuka</a>
+        {NAV.map((item) => <a class="menu__link" href={withBase(item.href)}>{item.label}</a>)}
+        <a class="menu__link menu__link--cta" href={withBase('/#ponuka')}>Cenová ponuka</a>
       </div>
     </details>
   </div>

@@ -185,10 +185,41 @@ Po dodaní reálnych fotiek môžeš zmazať `scripts/make-placeholders.mjs`.
 akýkoľvek hosting (Netlify, Vercel, Cloudflare Pages, GitHub Pages aj obyčajný
 FTP na shared hosting). Nie je potrebný Node na strane servera.
 
----
+### Dva režimy: testovací a ostrý
 
-## `_legacy/`
+Web musí fungovať na dvoch miestach naraz — na testovacích GitHub Pages
+(v podadresári podľa názvu repozitára) aj na ostrej doméne (v koreni). Rieši
+to dvojica premenných prostredia; **v súboroch sa pri prepínaní nič needituje**:
 
-Pôvodný export z návrhového nástroja (`index.html` + `support.js`). Slúži už
-len na porovnanie a **do buildu nevstupuje**. Keď potvrdíš, že nová verzia
-sedí, celý priečinok zmaž — história zostáva v gite.
+```bash
+# ostrý build — vezme doménu zo src/data/site.ts
+npm run build
+
+# testovací build do podadresára
+SITE_URL=https://todevelopers.github.io BASE_PATH=/webdev-constuct-comp npm run build
+```
+
+Preto sa interné odkazy **nikdy nepíšu natvrdo** ako `href="/realizacie/"`, ale
+cez pomocník `withBase()` zo `src/lib/url.ts`. Bez neho by na testovacej adrese
+ukazovali do koreňa domény a padali na 404.
+
+Testovacie nasadenie sa navyše samo vylúči z vyhľadávačov (`Disallow: /`
+v robots.txt plus `noindex` v hlavičke), aby v Google nekonkurovalo ostrému
+webu duplicitným obsahom. Rozpoznáva sa podľa toho, či web beží v podadresári.
+
+### GitHub Pages
+
+Workflow `.github/workflows/deploy-pages.yml` pri každom pushi spustí build
+a nasadí `dist/`. Jednorazovo treba v repozitári zapnúť:
+
+**Settings → Pages → Source: GitHub Actions**
+
+(Nie „Deploy from a branch“ — ten by servíroval zdrojáky projektu, nie
+zostavený web, a skončil by na 404.)
+
+Po zlúčení do `main` doplň `main` medzi `branches` vo workflow.
+
+### Prechod na ostrú doménu
+
+1. Nastav reálnu doménu do `SITE.url` v `src/data/site.ts`
+2. Buduj bez `BASE_PATH` — web pobeží v koreni, `noindex` zmizne sám

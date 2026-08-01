@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { withBase } from '../lib/url';
 ---
 
 <BaseLayout
@@ -21,8 +22,8 @@ import SiteFooter from '../components/SiteFooter.astro';
       </p>
 
       <div class="actions">
-        <a class="btn btn--solid" href="/">Späť na úvod</a>
-        <a class="btn btn--outline" href="/#kontakt">Kontakt</a>
+        <a class="btn btn--solid" href={withBase("/")}>Späť na úvod</a>
+        <a class="btn btn--outline" href={withBase("/#kontakt")}>Kontakt</a>
       </div>
     </div>
   </main>
