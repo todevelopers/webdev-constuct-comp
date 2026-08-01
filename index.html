@@ -596,7 +596,8 @@ class Component extends DCLogic {
         isVideo: m.type === 'video',
         select: () => this.setState({ mediaIdx: i }),
         style: 'position:relative;padding:0;border:2px solid ' + (i === this.state.mediaIdx ? t.a1 : 'transparent') + ';background:#000;cursor:pointer;overflow:hidden;'
-          + (narrow ? 'flex:1 0 auto;width:22%;min-width:74px;aspect-ratio:320/208;scroll-snap-align:start;' : 'flex:none;width:118px;height:76px;'),
+          + 'scroll-snap-align:start;'
+          + (narrow ? 'flex:1 0 auto;width:22%;min-width:74px;aspect-ratio:320/208;' : 'flex:none;width:118px;height:76px;'),
         imgStyle: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;'
       }));
     }
@@ -649,10 +650,9 @@ class Component extends DCLogic {
       detailShowsVideo: !!current && current.type === 'video',
       detailShowsPhoto: !!current && current.type === 'photo',
       activeImage, detailMedia,
-      mediaStripStyle: 'display:flex;background:' + t.ink2 + ';'
-        + (narrow
-          ? 'gap:6px;padding:8px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scrollbar-width:thin;'
-          : 'gap:10px;padding:12px;flex-wrap:wrap;'),
+      mediaStripStyle: 'display:flex;background:' + t.ink2 + ';flex-wrap:nowrap;overflow-x:auto;'
+        + '-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;scrollbar-width:thin;'
+        + (narrow ? 'gap:6px;padding:8px;' : 'gap:10px;padding:12px;'),
       videoBadgeStyle: 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(14,13,12,0.45);color:#fff;text-transform:uppercase;'
         + (narrow ? 'font-size:9px;letter-spacing:0.06em;' : 'font-size:11px;letter-spacing:0.14em;'),
       activeVideo: current && current.type === 'video' ? current.src : null,
