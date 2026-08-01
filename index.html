@@ -27,7 +27,7 @@
 
   <div style="position: sticky; top: 0; z-index: 40; background: rgba(14,13,12,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08);">
     <div style="max-width: 1320px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 32px); min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: clamp(12px, 2vw, 32px); flex-wrap: wrap;">
-      <a href="#uvod" style="display: flex; align-items: baseline; gap: 8px; color: #fff; min-width: 0;">
+      <a href="#uvod" onClick="{{ goTop }}" style="display: flex; align-items: baseline; gap: 8px; color: #fff; min-width: 0;">
         <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(21px, 5vw, 27px); letter-spacing: 0.06em; text-transform: uppercase;">Stavbex</span>
         <span style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--a1);">s.r.o.</span>
       </a>
@@ -621,6 +621,17 @@ class Component extends DCLogic {
       }),
       narrow, wide: !narrow,
       statsCols: w < 940 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+      // logo skroluje na úplný začiatok stránky, nie pod sticky panel
+      goTop: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        this.setState({ menuOpen: false });
+        if (typeof window === 'undefined') return;
+        // scrollovací kontajner je body (html aj body majú overflow-x: hidden), preto oboje
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        try { window.history.replaceState(null, '', window.location.pathname + window.location.search); } catch (err) {}
+      },
       menuOpen: narrow && !!this.state.menuOpen,
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       closeMenu: () => this.setState({ menuOpen: false }),
