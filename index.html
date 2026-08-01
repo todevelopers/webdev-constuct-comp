@@ -18,6 +18,8 @@
   a { color: oklch(0.62 0.15 55); text-decoration: none; }
   a:hover { color: oklch(0.72 0.15 55); }
   input, textarea, select, button { font-family: inherit; }
+  /* kotvy sekcií nesmú skončiť pod sticky top panelom (--hdr dopĺňa JS podľa reálnej výšky panelu) */
+  #uvod, #realizacie, #sluzby, #onas, #kontakt, #ponuka { scroll-margin-top: var(--hdr, 77px); }
   ::selection { background: oklch(0.72 0.15 55); color: #16110d; }
 </style>
 </helmet>
@@ -26,8 +28,8 @@
 <div ref="{{ rootRef }}" style="--ink: #0e0d0c; --ink2: #16110d; --paper: #f4f2ef; --line: #ddd8d1; --line2: #c9c2ba; --line3: #e6e1da; --body: #443c34; --muted: #6d645b; --a1: oklch(0.72 0.15 55); --a1h: oklch(0.82 0.15 55); --a2: oklch(0.78 0.12 55); --a3: oklch(0.84 0.108 55); --a4: oklch(0.62 0.15 55); --a5: oklch(0.55 0.14 55); background: var(--paper); min-height: 100vh;">
 
   <div style="position: sticky; top: 0; z-index: 40; background: rgba(14,13,12,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08);">
-    <div style="max-width: 1320px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 32px); min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: clamp(12px, 2vw, 32px); flex-wrap: wrap;">
-      <a href="#uvod" style="display: flex; align-items: baseline; gap: 8px; color: #fff; min-width: 0;">
+    <div ref="{{ barRef }}" style="max-width: 1320px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 32px); min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: clamp(12px, 2vw, 32px); flex-wrap: wrap;">
+      <a href="#uvod" onClick="{{ goTop }}" style="display: flex; align-items: baseline; gap: 8px; color: #fff; min-width: 0;">
         <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(21px, 5vw, 27px); letter-spacing: 0.06em; text-transform: uppercase;">Stavbex</span>
         <span style="font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--a1);">s.r.o.</span>
       </a>
@@ -511,6 +513,16 @@ class Component extends DCLogic {
   state = { cat: 'Všetko', openId: null, mediaIdx: 0, sent: false, settingsOpen: false, heroReady: false, pal: (typeof localStorage !== 'undefined' && localStorage.getItem('stavbex-palette')) || null };
 
   rootRef = React.createRef();
+  barRef = React.createRef();
+
+  // výška sticky panelu ide do --hdr, z ktorej sekcie čerpajú scroll-margin-top
+  measureHeader() {
+    const bar = this.barRef.current, root = this.rootRef.current;
+    if (!bar || !root) return;
+    // meriame len horný riadok panelu (bez rozbaleného menu) + 1 px spodný okraj
+    const h = Math.round(bar.getBoundingClientRect().height) + 1;
+    if (h > 1 && h !== this.hdr) { this.hdr = h; root.style.setProperty('--hdr', h + 'px'); }
+  }
 
   applyPalette() {
     const el = this.rootRef.current;
@@ -521,18 +533,34 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.applyPalette();
+    this.measureHeader();
     this.autoplayLoop();
     this.onResize = () => {
       if (this.raf) cancelAnimationFrame(this.raf);
-      this.raf = requestAnimationFrame(() => this.setState({ w: window.innerWidth }));
+      this.raf = requestAnimationFrame(() => { this.measureHeader(); this.setState({ w: window.innerWidth }); });
     };
     window.addEventListener('resize', this.onResize);
+    // po doložení fontov sa výška panelu môže zmeniť
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => this.measureHeader()).catch(() => {});
+    }
+    // stránka sa rendruje až po načítaní, natívny skok na kotvu z URL preto dobehneme sami
+    this.scrollToHash();
     this.setState({ w: window.innerWidth });
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.onResize);
   }
-  componentDidUpdate() { this.applyPalette(); this.autoplayLoop(); }
+  componentDidUpdate() { this.applyPalette(); this.measureHeader(); this.autoplayLoop(); }
+
+  scrollToHash() {
+    if (typeof window === 'undefined' || !window.location.hash) return;
+    requestAnimationFrame(() => {
+      let el = null;
+      try { el = document.getElementById(decodeURIComponent(window.location.hash.slice(1))); } catch (e) {}
+      if (el) el.scrollIntoView();
+    });
+  }
   autoplayLoop() {
     const el = this.heroVideo;
     if (!el) return;
@@ -607,6 +635,7 @@ class Component extends DCLogic {
       yes: true,
       tiles: MAP_TILES,
       rootRef: this.rootRef,
+      barRef: this.barRef,
       settingsOpen: !!this.state.settingsOpen,
       toggleSettings: () => this.setState(s => ({ settingsOpen: !s.settingsOpen })),
       closeSettings: () => this.setState({ settingsOpen: false }),
@@ -621,6 +650,17 @@ class Component extends DCLogic {
       }),
       narrow, wide: !narrow,
       statsCols: w < 940 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+      // logo skroluje na úplný začiatok stránky, nie pod sticky panel
+      goTop: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        this.setState({ menuOpen: false });
+        if (typeof window === 'undefined') return;
+        // scrollovací kontajner je body (html aj body majú overflow-x: hidden), preto oboje
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        try { window.history.replaceState(null, '', window.location.pathname + window.location.search); } catch (err) {}
+      },
       menuOpen: narrow && !!this.state.menuOpen,
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
       closeMenu: () => this.setState({ menuOpen: false }),
