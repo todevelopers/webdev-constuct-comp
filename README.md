@@ -149,9 +149,12 @@ Petržalka“ sú presne to, čo stavebnej firme privádza zákazníkov.
 Build je vďaka tomu deterministický a funguje offline, stránka nemá externý
 bod zlyhania a do Googlu neodchádza IP adresa návštevníka (GDPR).
 
-**Mapa sa načíta až na kliknutie.** Vložený Google iframe posiela dáta
-návštevníka Googlu ešte pred akýmkoľvek súhlasom a stojí stovky kB. Kým
-používateľ neklikne, je na mieste mapy odkaz do Google Máp.
+**Mapa je z OpenStreetMap, nie z Google.** Načíta sa automaticky, ako obyčajný
+`<iframe>` bez kúska JavaScriptu. Vložená Google mapa by posielala IP adresu
+a cookies každého návštevníka Googlu ešte pred súhlasom (GDPR) a stála by
+stovky kB navyše. Odkaz „Otvoriť v Google Mapách“ zostáva pod mapou — kým naň
+niekto neklikne, Googlu neodíde nič. Výrez sa počíta zo súradníc v
+`src/data/site.ts`.
 
 **Hero je obrázok, nie video.** Hero je LCP prvok — video ho zdržiava o stovky
 milisekúnd na tom najdôležitejšom mieste stránky.

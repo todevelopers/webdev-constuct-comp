@@ -81,12 +81,42 @@ export const SOCIAL = {
   googleBusiness: '',
 } as const;
 
-/** Odkaz na mapu v pätičke/kontakte (bez vloženého iframu — viď Contact.astro). */
+/** Odkaz „otvoriť v Google Mapách" — vedie von zo stránky, nič sa nenačítava. */
 export const MAP_LINK =
   `https://www.google.com/maps/search/?api=1&query=` +
   encodeURIComponent(
     `${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city}`,
   );
+
+/**
+ * Výrez mapy okolo sídla — koľko stupňov zemepisnej dĺžky/šírky má byť vidieť.
+ * Väčšie číslo = viac oddialené. 0.007 je zhruba 500 m na východ aj na západ.
+ */
+const MAP_SPAN = { lng: 0.007, lat: 0.0035 } as const;
+
+/**
+ * Adresa vloženej mapy (OpenStreetMap), ktorá sa načíta priamo v stránke.
+ *
+ * Zámerne nie Google: vložená Google mapa posiela IP adresu a cookies každého
+ * návštevníka Googlu ešte pred akýmkoľvek súhlasom (GDPR) a stiahne ~600 kB.
+ * OpenStreetMap nenasadzuje reklamné cookies a je násobne ľahší. Odkaz do
+ * Google Máp (MAP_LINK) zostáva vedľa mapy pre navigáciu.
+ *
+ * `bbox` je obdĺžnik výrezu v poradí západ, juh, východ, sever.
+ */
+export const MAP_EMBED = (() => {
+  const { lat, lng } = CONTACT.geo;
+  // toFixed orezáva plávajúcu čiarku — bez neho by v URL bolo 17.139499999999998.
+  const bbox = [
+    lng - MAP_SPAN.lng,
+    lat - MAP_SPAN.lat,
+    lng + MAP_SPAN.lng,
+    lat + MAP_SPAN.lat,
+  ]
+    .map((n) => n.toFixed(6))
+    .join(',');
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
+})();
 
 /** Hlavná navigácia. Poradie tu = poradie v hlavičke aj v mobilnom menu. */
 export const NAV = [
