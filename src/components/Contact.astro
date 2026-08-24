@@ -13,6 +13,12 @@
  *
  * `loading="lazy"` = prehliadač mapu stiahne až keď sa k nej návštevník
  * doroluje. Stále automaticky, ale nespomaľuje prvé zobrazenie stránky.
+ *
+ * Mapa je zámerne zamknutá — nedá sa posúvať ani približovať. Špendlík totiž
+ * kreslíme my nad rámom mapy (dnu do cudzieho iframu sa nedostaneme), takže
+ * pri posunutí mapy by prestal ukazovať na sídlo. Zamknutie zároveň rieši to,
+ * že vložená mapa na mobile pohlcuje ťahanie prstom namiesto rolovania
+ * stránky. Kto si potrebuje mapu prezrieť, klikne a otvorí sa Google Mapa.
  */
 import { CONTACT, MAP_EMBED, MAP_LINK, SITE } from '../data/site';
 
@@ -69,6 +75,19 @@ const mapTitle = `Mapa – sídlo ${SITE.name}, ${CONTACT.address.street}, ${CON
             title={mapTitle}
             loading="lazy"
             referrerpolicy="no-referrer"></iframe>
+
+          {/* Priehľadná vrstva nad mapou. Zachytí ťahanie aj klik, takže mapa
+              zostane stáť a špendlík pod ňou vždy ukazuje na sídlo. Rolovanie
+              stránky cez ňu prejde, na rozdiel od samotnej mapy. Pre čítačky
+              obrazovky je skrytá — to isté hovorí viditeľný odkaz pod mapou,
+              takže by ju len zdvojovala. */}
+          <a
+            class="map__lock"
+            href={MAP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-hidden="true"
+            tabindex="-1"></a>
 
           {/* Špendlík kreslíme sami, nad rámom mapy — dnu do cudzieho iframu
               sa žiadnym CSS nedostaneme, takže modrý marker OpenStreetMap by
@@ -164,6 +183,12 @@ const mapTitle = `Mapa – sídlo ${SITE.name}, ${CONTACT.address.street}, ${CON
     /* Podklady OpenStreetMap sú svetlé — filter ich preladí do tmavej sekcie.
        Špendlík je mimo iframu, takže ho filter nezasiahne a farba sedí. */
     filter: invert(0.92) hue-rotate(180deg) brightness(0.94) contrast(0.9) saturate(0.7);
+  }
+
+  .map__lock {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
   }
 
   .map__pin {
