@@ -1,0 +1,158 @@
+---
+/**
+ * Dlaždica realizácie v galérii.
+ *
+ * Celá karta je jeden <a> na samostatnú stránku realizácie — nie modálne okno.
+ * Každá realizácia tak má vlastnú URL, ktorá sa dá poslať, indexovať Googlom
+ * a otvoriť na novej karte. Presne to sú dopyty typu „rekonštrukcia bytu
+ * Petržalka“, na ktorých stavebnej firme záleží.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/url';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Prvé dlaždice sa načítajú prioritne, zvyšok lazy. */
+  eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const { title, category, year, place, area, cover, gallery, wide } = project.data;
+const photoCount = gallery.length + 1;
+---
+
+<a
+  class:list={['card', wide && 'card--wide']}
+  href={withBase(`/realizacie/${project.id}/`)}
+  data-category={category}
+>
+  <div class="card__media">
+    <Image
+      class="card__img"
+      src={cover}
+      alt={`${title} — ${category}, ${place}`}
+      widths={[400, 700, 1100]}
+      sizes="(min-width: 62rem) 45vw, 100vw"
+      loading={eager ? 'eager' : 'lazy'}
+    />
+    <span class="card__badge">{photoCount} fotiek</span>
+    <div class="card__scrim"></div>
+
+    <div class="card__body">
+      <p class="card__meta">
+        <span>{category}</span>
+        <span class="card__sep">/</span>
+        <span class="card__year">{year}</span>
+      </p>
+      <h3 class="card__title">{title}</h3>
+      <p class="card__place">{place} · {area}</p>
+    </div>
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    color: inherit;
+    /* Výšku určuje riadok mriežky (grid-auto-rows), nie pomer strán karty —
+       inak by široká a bežná dlaždica v tom istom riadku boli rôzne vysoké. */
+    height: 100%;
+  }
+
+  .card:hover {
+    color: inherit;
+  }
+
+  .card__media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .card:hover .card__img,
+  .card:focus-visible .card__img {
+    transform: scale(1.06);
+  }
+
+  .card__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(14, 13, 12, 0.86) 0%,
+      rgba(14, 13, 12, 0.1) 55%,
+      rgba(14, 13, 12, 0) 100%
+    );
+  }
+
+  .card__badge {
+    position: absolute;
+    top: 1.125rem;
+    right: 1.125rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: rgba(14, 13, 12, 0.72);
+    color: var(--on-dark);
+  }
+
+  .card__body {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: 1.5rem 1.625rem;
+    color: var(--on-dark);
+  }
+
+  .card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--a3);
+  }
+
+  .card__sep {
+    opacity: 0.45;
+  }
+
+  .card__year {
+    color: var(--on-dark-65);
+  }
+
+  .card__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--fs-card-title);
+    line-height: 1.06;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  .card__place {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--on-dark-65);
+  }
+
+  /* Široká dlaždica zaberie dva stĺpce — ale len tam, kde sú aspoň dva.
+     Na mobile sa pravidlo neuplatní a rozloženie sa nerozbije. */
+  @media (min-width: 48rem) {
+    .card--wide {
+      grid-column: span 2;
+    }
+  }
+</style>

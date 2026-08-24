@@ -1,0 +1,72 @@
+---
+/**
+ * Potvrdenie po odoslaní formulára.
+ *
+ * Samostatná stránka namiesto prepnutia stavu v komponente: odoslanie má
+ * vlastnú URL, takže sa dá zmerať ako konverzia a funguje aj bez JavaScriptu.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { CONTACT } from '../data/site';
+import { withBase } from '../lib/url';
+---
+
+<BaseLayout
+  title="Ďakujeme za dopyt"
+  description="Vašu žiadosť o cenovú ponuku sme prijali. Ozveme sa najneskôr do dvoch pracovných dní."
+  noindex
+>
+  <SiteHeader />
+
+  <main id="obsah" class="page">
+    <div class="wrap inner">
+      <p class="eyebrow">Cenová ponuka</p>
+      <h1 class="title">Správa odoslaná</h1>
+      <p class="lead text">
+        Ďakujeme. Ozveme sa najneskôr do dvoch pracovných dní na uvedené kontaktné
+        údaje a dohodneme termín obhliadky.
+      </p>
+      <p class="text">
+        Ak je vec súrna, zavolajte na
+        <a href={`tel:${CONTACT.phoneHref}`}>{CONTACT.phone}</a>.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn--solid" href={withBase("/")}>Späť na úvod</a>
+        <a class="btn btn--outline" href={withBase("/#realizacie")}>Prezrieť realizácie</a>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .page {
+    background: var(--paper);
+  }
+
+  .inner {
+    padding-block: clamp(4rem, 12vw, 8rem);
+    max-width: 60ch;
+  }
+
+  .title {
+    font-size: var(--fs-h2);
+    margin-top: 0.75rem;
+    color: var(--ink2);
+  }
+
+  .text {
+    margin-top: 1.25rem;
+    color: var(--body);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+    margin-top: 2.5rem;
+  }
+</style>

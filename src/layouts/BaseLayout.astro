@@ -1,0 +1,85 @@
+---
+/**
+ * Základný layout — jediné miesto, kde sa rieši <head>, SEO a JSON-LD.
+ *
+ * Každá stránka sem povinne posiela `title` a `description`; TypeScript to
+ * vynúti, takže stránka bez popisu sa nedá vytvoriť omylom.
+ */
+import { SITE } from '../data/site';
+import { withBase, isProductionDeploy } from '../lib/url';
+import ogDefault from '../assets/site/og-default.jpg';
+import '../styles/global.css';
+
+// Fonty, ktoré potrebuje text nad ohybom stránky. Bez preloadu si ich
+// prehliadač všimne až po stiahnutí a spracovaní CSS, čo viditeľne oddiali
+// vykreslenie nadpisu (LCP). Slovenský text potrebuje aj latin-ext.
+import bodyLatin from '@fontsource/barlow/files/barlow-latin-400-normal.woff2';
+import bodyLatinExt from '@fontsource/barlow/files/barlow-latin-ext-400-normal.woff2';
+import displayLatin from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2';
+import displayLatinExt from '@fontsource/barlow-condensed/files/barlow-condensed-latin-ext-700-normal.woff2';
+
+const preloadFonts = [displayLatin, displayLatinExt, bodyLatin, bodyLatinExt];
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolútna alebo relatívna cesta k OG obrázku. Default = og-default.jpg */
+  ogImage?: string;
+  /** Nastav na true pre stránky, ktoré nemajú byť vo vyhľadávaní (napr. ďakovná). */
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage ?? ogDefault.src, Astro.site).href;
+
+// Porovnávame voči `withBase('/')`, nie voči '/', lebo pri nasadení do
+// podadresára je domovská stránka na /<podadresar>/, nie v koreni.
+const trim = (p: string) => p.replace(/\/+$/, '');
+const isHome = trim(Astro.url.pathname) === trim(withBase('/'));
+
+/** Domovská stránka má názov firmy prvý, podstránky svoj vlastný titulok. */
+const fullTitle = isHome ? title : `${title} | ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      /* Testovacie nasadenie sa nikdy nesmie dostať do indexu — inak by
+         konkurovalo ostrému webu duplicitným obsahom. */
+      (noindex || !isProductionDeploy()) && <meta name="robots" content="noindex, follow" />
+    }
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {
+      preloadFonts.map((href) => (
+        <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="anonymous" />
+      ))
+    }
+
+    <meta name="theme-color" content="#0e0d0c" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
+    <slot />
+  </body>
+</html>

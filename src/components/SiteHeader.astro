@@ -1,0 +1,219 @@
+---
+/**
+ * Sticky hlavička s mobilným menu.
+ *
+ * Bez JavaScriptu zostáva navigácia použiteľná — odkazy sú obyčajné <a> a
+ * mobilné menu sa rozbaľuje cez <details>, čo je natívne správanie prehliadača.
+ * Skript len meria výšku panelu do --hdr, aby kotvy nekončili pod ním.
+ */
+import { SITE, NAV } from '../data/site';
+import { withBase } from '../lib/url';
+---
+
+<header class="hdr" data-header>
+  <div class="hdr__bar wrap" data-header-bar>
+    <a class="brand" href={withBase('/')}>
+      <span class="brand__name">{SITE.shortName}</span>
+      <span class="brand__suffix">s.r.o.</span>
+    </a>
+
+    <nav class="nav" aria-label="Hlavná navigácia">
+      {NAV.map((item) => <a class="nav__link" href={withBase(item.href)}>{item.label}</a>)}
+      <a class="btn btn--primary nav__cta" href={withBase('/#ponuka')}>Cenová ponuka</a>
+    </nav>
+
+    <details class="menu" data-menu>
+      <summary class="menu__toggle" aria-label="Menu">
+        <span class="menu__bar"></span>
+        <span class="menu__bar"></span>
+        <span class="menu__bar"></span>
+      </summary>
+      <div class="menu__panel">
+        {NAV.map((item) => <a class="menu__link" href={withBase(item.href)}>{item.label}</a>)}
+        <a class="menu__link menu__link--cta" href={withBase('/#ponuka')}>Cenová ponuka</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Výška hlavičky → --hdr, z ktorej čerpá scroll-margin-top pri kotvách.
+  // Bez toho by nadpis sekcie skončil schovaný pod sticky panelom.
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const bar = document.querySelector<HTMLElement>('[data-header-bar]');
+  const menu = document.querySelector<HTMLDetailsElement>('[data-menu]');
+
+  if (header && bar) {
+    const setHeight = () => {
+      const h = Math.round(bar.getBoundingClientRect().height) + 1;
+      if (h > 1) document.documentElement.style.setProperty('--hdr', `${h}px`);
+    };
+    setHeight();
+    new ResizeObserver(setHeight).observe(bar);
+    // Po doložení fontov sa výška panelu môže ešte zmeniť.
+    document.fonts?.ready.then(setHeight).catch(() => {});
+  }
+
+  if (menu) {
+    // Po kliknutí na položku zavri menu a nechaj prehliadač skočiť na kotvu.
+    menu.querySelectorAll('a').forEach((link) =>
+      link.addEventListener('click', () => menu.removeAttribute('open')),
+    );
+    // Escape zavrie menu — očakávané správanie pre rozbalený panel.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') menu.removeAttribute('open');
+    });
+  }
+</script>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background: rgba(14, 13, 12, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hairline-dark-soft);
+  }
+
+  .hdr__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(0.75rem, 2vw, 2rem);
+    min-height: 76px;
+    padding-block: 0.875rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: var(--on-dark);
+    min-width: 0;
+  }
+
+  .brand:hover {
+    color: var(--on-dark);
+  }
+
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .brand__suffix {
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--a1);
+  }
+
+  /* ---- Desktop navigácia ---- */
+  .nav {
+    display: none;
+    align-items: center;
+    gap: clamp(0.875rem, 2vw, 1.875rem);
+  }
+
+  .nav__link {
+    font-size: 0.78rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--on-dark-65);
+    white-space: nowrap;
+    transition: color var(--transition);
+  }
+
+  .nav__link:hover {
+    color: var(--on-dark);
+  }
+
+  .nav__cta {
+    padding: 0.6875rem 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  /* ---- Mobilné menu ---- */
+  .menu {
+    position: relative;
+  }
+
+  .menu__toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    list-style: none;
+    transition:
+      background-color var(--transition),
+      border-color var(--transition);
+  }
+
+  .menu__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu__toggle:hover {
+    border-color: var(--on-dark);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .menu__bar {
+    width: 20px;
+    height: 2px;
+    background: var(--on-dark);
+  }
+
+  .menu__panel {
+    position: absolute;
+    top: calc(100% + 0.875rem);
+    right: calc(-1 * var(--gutter));
+    width: 100vw;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    /* Plne nepriehľadné — rozbalené menu nemá dôvod presvitať a ušetríme
+       backdrop-filter, ktorý je na mobiloch najdrahšia časť vykresľovania. */
+    background: var(--ink);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .menu__link {
+    padding: 1.125rem var(--gutter);
+    font-size: 0.875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-dark);
+    border-bottom: 1px solid var(--hairline-dark-soft);
+    transition: background-color var(--transition);
+  }
+
+  .menu__link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--on-dark);
+  }
+
+  .menu__link--cta {
+    color: var(--a2);
+    border-bottom: 0;
+  }
+
+  /* Breakpoint je tam, kde sa vodorovná navigácia prestane vmestať. */
+  @media (min-width: 62rem) {
+    .nav {
+      display: flex;
+    }
+    .menu {
+      display: none;
+    }
+  }
+</style>

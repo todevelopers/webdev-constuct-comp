@@ -1,0 +1,149 @@
+---
+/**
+ * Galéria realizácií s filtrom podľa kategórie.
+ *
+ * Kategórie sa odvodzujú z obsahu — nikde nie je druhý, ručne udržiavaný
+ * zoznam, ktorý by sa mohol rozísť s realitou.
+ *
+ * Filter je progresívne vylepšenie: bez JavaScriptu sa lišta filtrov vôbec
+ * nezobrazí a používateľ vidí všetky realizácie. Nikdy sa nestane, že by
+ * návštevník uvidel nefunkčné tlačidlá alebo prázdnu galériu.
+ */
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+
+const categories = [...new Set(projects.map((p) => p.data.category))].sort((a, b) =>
+  a.localeCompare(b, 'sk'),
+);
+---
+
+<section class="section section--paper" id="realizacie">
+  <div class="wrap">
+    <header class="head">
+      <div>
+        <p class="eyebrow">Galéria</p>
+        <h2 class="section-title">Realizované projekty</h2>
+      </div>
+
+      <div class="filter" data-filter hidden>
+        <button class="chip" type="button" data-cat="*" aria-pressed="true">Všetko</button>
+        {
+          categories.map((c) => (
+            <button class="chip" type="button" data-cat={c} aria-pressed="false">
+              {c}
+            </button>
+          ))
+        }
+      </div>
+    </header>
+
+    <div class="grid" data-grid>
+      {projects.map((project, i) => <ProjectCard project={project} eager={i < 2} />)}
+    </div>
+
+    <p class="empty" data-empty hidden>V tejto kategórii zatiaľ nemáme zverejnenú realizáciu.</p>
+  </div>
+</section>
+
+<script>
+  const filter = document.querySelector<HTMLElement>('[data-filter]');
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+
+  if (filter && grid) {
+    // Lišta je v HTML skrytá; odkrýva ju až skript, takže bez JS
+    // nikdy neuvidíš tlačidlá, ktoré nič nerobia.
+    filter.hidden = false;
+
+    const chips = [...filter.querySelectorAll<HTMLButtonElement>('.chip')];
+    const cards = [...grid.querySelectorAll<HTMLElement>('[data-category]')];
+
+    filter.addEventListener('click', (e) => {
+      const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip');
+      if (!chip) return;
+
+      const wanted = chip.dataset.cat ?? '*';
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+
+      let shown = 0;
+      for (const card of cards) {
+        const match = wanted === '*' || card.dataset.category === wanted;
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      if (empty) empty.hidden = shown > 0;
+    });
+  }
+</script>
+
+<style>
+  .head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.625rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .filter {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 0.6875rem 1.0625rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--line2);
+    color: var(--body);
+    cursor: pointer;
+    transition:
+      background-color var(--transition),
+      color var(--transition),
+      border-color var(--transition);
+  }
+
+  .chip:hover {
+    background: var(--ink2);
+    border-color: var(--ink2);
+    color: var(--paper);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--ink2);
+    border-color: var(--ink2);
+    color: var(--paper);
+  }
+
+  /* auto-fill + minmax znamená, že mriežka funguje pre 3 aj pre 30
+     realizácií bez toho, aby sa CSS muselo prepisovať. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    /* Pevná výška riadku drží všetky dlaždice v riadku rovnako vysoké — aj
+       tie široké. Zároveň rezervuje miesto ešte pred načítaním obrázkov,
+       takže sa rozloženie počas načítania nehýbe (CLS). */
+    grid-auto-rows: clamp(16rem, 26vw, 26rem);
+    /* `dense` doplní diery, ktoré po sebe nechajú široké dlaždice — mriežka
+       tak zostane kompaktná pri ľubovoľnom počte realizácií. */
+    grid-auto-flow: dense;
+    gap: clamp(0.625rem, 1.5vw, 1.25rem);
+    margin-top: 2.5rem;
+  }
+
+  .empty {
+    margin-top: 2.5rem;
+    color: var(--muted);
+  }
+</style>
