@@ -24,7 +24,8 @@ npm run check    # typová kontrola (.astro + .ts)
 src/
 ├── data/                    ← fakty o firme (TypeScript, kontrolované typmi)
 │   ├── site.ts              ← názov, kontakty, IČO, doména, endpoint formulára
-│   └── services.ts          ← služby, fakty o firme, body pri cenovej ponuke
+│   ├── services.ts          ← služby, fakty o firme, body pri cenovej ponuke
+│   └── palettes.ts          ← palety pre prepínač farebného akcentu
 ├── content/projects/        ← REALIZÁCIE: jeden .md súbor = jedna realizácia
 ├── content.config.ts        ← schéma realizácií (zod) — vynútená pri builde
 ├── assets/                  ← obrázky, ktoré prechádzajú optimalizáciou
@@ -110,6 +111,14 @@ hláškou**. Chyba sa tak nikdy nedostane na produkciu.
 | zelená | `162` |
 | limetka | `125` |
 | bordó | `14` |
+
+Návštevník si vie akcent prepnúť aj sám — ozubené koliesko vpravo dole
+ponúka šesť hotových paliet a voľbu si jeho prehliadač zapamätá (nie je to
+nastavenie webu, mení sa len jemu). Palety sú na konci `tokens.css` v blokoch
+`[data-palette='…']`, ich názvy v `src/data/palettes.ts`.
+
+Ak prepínač u zákazníka nechceš, zmaž riadok `<AccentPicker />` v
+`src/layouts/BaseLayout.astro` — web ostane na východiskovej palete.
 
 ### Napojiť kontaktný formulár
 

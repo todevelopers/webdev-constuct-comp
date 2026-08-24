@@ -1,0 +1,247 @@
+---
+/**
+ * Prepínač farebného akcentu — plávajúce ozubené koliesko vpravo dole.
+ *
+ * Prenesené z pôvodného exportu (tam ho kreslil React). Tu je to obyčajné
+ * HTML: kliknutie zapíše `id` palety na `<html data-palette="…">` a farby
+ * prepnú pravidlá v `src/styles/tokens.css`. Voľba prežije obnovenie stránky
+ * v localStorage; layout ju aplikuje ešte pred vykreslením, aby neblikla
+ * východisková paleta.
+ *
+ * Bez JavaScriptu by tlačidlo nič nerobilo, preto je celý prepínač v HTML
+ * skrytý a odkrýva ho až skript — rovnako ako filter realizácií.
+ */
+import { PALETTES } from '../data/palettes';
+---
+
+<div class="picker" data-picker hidden>
+  <div class="panel" id="akcent-panel" data-picker-panel hidden>
+    <div class="panel__head">
+      <p class="panel__title">Farebný akcent</p>
+      <button class="panel__close" type="button" data-picker-close aria-label="Zavrieť">×</button>
+    </div>
+
+    <div class="panel__list">
+      {
+        PALETTES.map((p) => (
+          <button class="row" type="button" data-palette-choice={p.id} aria-pressed="false">
+            {/* data-palette na vzorkovníku nastaví farby palety len preň samé,
+                takže var(--a1) nižšie vráti presne jej akcent. */}
+            <span class="row__dot" data-palette={p.id} />
+            <span>{p.label}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <button
+    class="toggle"
+    type="button"
+    data-picker-toggle
+    aria-expanded="false"
+    aria-controls="akcent-panel"
+    aria-label="Nastavenia vzhľadu"
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path
+        d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.6a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.01a1.7 1.7 0 0 0 1.56 1.02H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1.03z"
+      ></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  import { PALETTE_IDS, DEFAULT_PALETTE, PALETTE_STORAGE_KEY } from '../data/palettes';
+
+  const picker = document.querySelector<HTMLElement>('[data-picker]');
+  const panel = document.querySelector<HTMLElement>('[data-picker-panel]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-picker-toggle]');
+
+  if (picker && panel && toggle) {
+    // Prepínač je v HTML skrytý; odkrýva ho až skript, aby bez JS nikto
+    // nevidel tlačidlo, ktoré nič nespraví.
+    picker.hidden = false;
+
+    const rows = [...picker.querySelectorAll<HTMLButtonElement>('[data-palette-choice]')];
+    const root = document.documentElement;
+
+    /** Zvýrazní riadok palety, ktorá je práve nastavená. */
+    const markActive = () => {
+      const current = root.dataset.palette || DEFAULT_PALETTE;
+      rows.forEach((row) =>
+        row.setAttribute('aria-pressed', String(row.dataset.paletteChoice === current)),
+      );
+    };
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    markActive();
+
+    toggle.addEventListener('click', () => setOpen(panel.hidden));
+
+    picker
+      .querySelector<HTMLButtonElement>('[data-picker-close]')
+      ?.addEventListener('click', () => {
+        setOpen(false);
+        toggle.focus();
+      });
+
+    for (const row of rows) {
+      row.addEventListener('click', () => {
+        const id = row.dataset.paletteChoice;
+        if (!id || !PALETTE_IDS.includes(id)) return;
+
+        // Východisková paleta žiadny atribút nepotrebuje — je to obsah :root.
+        if (id === DEFAULT_PALETTE) root.removeAttribute('data-palette');
+        else root.dataset.palette = id;
+
+        try {
+          localStorage.setItem(PALETTE_STORAGE_KEY, id);
+        } catch {
+          // Súkromné okno bez úložiska — paleta vydrží len do zavretia karty.
+        }
+        markActive();
+      });
+    }
+
+    // Escape a klik mimo panela ho zavrú — očakávané správanie plávajúceho panela.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !picker.contains(e.target as Node)) setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .picker {
+    position: fixed;
+    right: clamp(0.875rem, 3vw, 1.625rem);
+    bottom: clamp(0.875rem, 3vw, 1.625rem);
+    z-index: var(--z-dialog);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  /* ---- Plávajúce tlačidlo ---- */
+  .toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    background: var(--a1);
+    color: var(--ink);
+    border: 0;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: background-color var(--transition);
+  }
+
+  .toggle:hover {
+    background: var(--a1h);
+  }
+
+  /* ---- Panel ---- */
+  .panel {
+    width: 268px;
+    max-width: calc(100vw - 2 * clamp(0.875rem, 3vw, 1.625rem));
+    padding: 1.125rem;
+    background: rgba(14, 13, 12, 0.96);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .panel__title {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--on-dark-45);
+  }
+
+  .panel__close {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    font-size: 0.875rem;
+    line-height: 1;
+    background: none;
+    color: var(--on-dark);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    cursor: pointer;
+    transition: background-color var(--transition);
+  }
+
+  .panel__close:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  /* ---- Riadok palety ---- */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.6875rem 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: left;
+    background: none;
+    color: var(--on-dark-65);
+    border: 1px solid var(--hairline-dark);
+    cursor: pointer;
+    transition:
+      background-color var(--transition),
+      border-color var(--transition),
+      color var(--transition);
+  }
+
+  .row:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.34);
+    color: var(--on-dark);
+  }
+
+  .row[aria-pressed='true'] {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.34);
+    color: var(--on-dark);
+  }
+
+  .row__dot {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    /* Farbu berie z vlastného [data-palette] — pozri tokens.css. */
+    background: var(--a1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  }
+</style>
