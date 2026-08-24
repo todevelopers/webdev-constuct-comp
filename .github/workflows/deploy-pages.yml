@@ -1,10 +1,12 @@
 name: Nasadenie na GitHub Pages
 
-# Testovacie nasadenie vetvy, na ktorej sa vyvíja. Po zlúčení do main stačí
-# do `branches` doplniť `main` (alebo tento riadok nahradiť).
+# Nasadzuje sa z main aj z vývojovej vetvy. Obe idú na tú istú adresu, takže
+# platí posledný push — po zlúčení do main vývojovú vetvu z tohto zoznamu
+# pokojne odober, nech sa nepredbiehajú.
 on:
   push:
     branches:
+      - main
       - claude/css-support-js-compilation-yzi7gi
   workflow_dispatch:
 
