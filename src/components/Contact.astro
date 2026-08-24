@@ -62,12 +62,23 @@ const mapTitle = `Mapa – sídlo ${SITE.name}, ${CONTACT.address.street}, ${CON
       </div>
 
       <div class="map">
-        <iframe
-          class="map__frame"
-          src={MAP_EMBED}
-          title={mapTitle}
-          loading="lazy"
-          referrerpolicy="no-referrer"></iframe>
+        <div class="map__canvas">
+          <iframe
+            class="map__frame"
+            src={MAP_EMBED}
+            title={mapTitle}
+            loading="lazy"
+            referrerpolicy="no-referrer"></iframe>
+
+          {/* Špendlík kreslíme sami, nad rámom mapy — dnu do cudzieho iframu
+              sa žiadnym CSS nedostaneme, takže modrý marker OpenStreetMap by
+              sa prefarbiť nedal. Špička sedí presne na strede mapy, čo je
+              zhodou bboxu presne adresa sídla. */}
+          <svg class="map__pin" viewBox="0 0 24 32" width="24" height="32" aria-hidden="true">
+            <path d="M12 0a12 12 0 0 0-12 12c0 9 12 20 12 20s12-11 12-20A12 12 0 0 0 12 0z" />
+            <circle cx="12" cy="12" r="4.25" />
+          </svg>
+        </div>
 
         <p class="map__foot">
           <a class="map__out" href={MAP_LINK} target="_blank" rel="noopener noreferrer">Otvoriť v Google Mapách</a>
@@ -137,14 +148,41 @@ const mapTitle = `Mapa – sídlo ${SITE.name}, ${CONTACT.address.street}, ${CON
     overflow: hidden;
   }
 
+  .map__canvas {
+    position: relative;
+    flex: 1;
+    display: flex;
+    min-height: 320px;
+  }
+
   .map__frame {
     flex: 1;
     display: block;
     width: 100%;
     min-height: 320px;
     border: 0;
-    /* Podklady OpenStreetMap sú svetlé — filter ich preladí do tmavej sekcie. */
+    /* Podklady OpenStreetMap sú svetlé — filter ich preladí do tmavej sekcie.
+       Špendlík je mimo iframu, takže ho filter nezasiahne a farba sedí. */
     filter: invert(0.92) hue-rotate(180deg) brightness(0.94) contrast(0.9) saturate(0.7);
+  }
+
+  .map__pin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    /* Špička je v SVG na spodnej hrane, takže -100% ju posadí na stred mapy. */
+    transform: translate(-50%, -100%);
+    /* Nech sa dá mapa pod špendlíkom ďalej ťahať. */
+    pointer-events: none;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
+  }
+
+  .map__pin path {
+    fill: var(--a1);
+  }
+
+  .map__pin circle {
+    fill: var(--ink2);
   }
 
   .map__foot {
