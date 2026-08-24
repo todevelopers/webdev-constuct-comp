@@ -2,19 +2,21 @@
 /**
  * Kontakt + mapa.
  *
- * Mapa sa NEnačítava automaticky. Vložený Google iframe posiela IP adresu a
- * cookies návštevníka Googlu ešte pred akýmkoľvek súhlasom — čo je pri GDPR
- * problém a zároveň to stojí ~600 kB a niekoľko sto ms pri načítaní stránky.
- * Namiesto toho je tu „fasáda“: mapa sa načíta až na kliknutie a bez
- * JavaScriptu zostáva obyčajný odkaz do Google Máp.
+ * Mapa sa načíta automaticky, priamo v stránke, ako obyčajný <iframe> —
+ * bez jediného riadka JavaScriptu, takže funguje aj s vypnutým JS.
+ *
+ * Podklady sú z OpenStreetMap, nie z Google. Vložená Google mapa posiela IP
+ * adresu a cookies každého návštevníka Googlu ešte pred akýmkoľvek súhlasom
+ * (GDPR) a stiahne ~600 kB pri každom otvorení stránky. OpenStreetMap
+ * nenasadzuje reklamné cookies a je násobne ľahší. Odkaz do Google Máp
+ * zostáva pod mapou — kým naň niekto neklikne, Googlu neodíde nič.
+ *
+ * `loading="lazy"` = prehliadač mapu stiahne až keď sa k nej návštevník
+ * doroluje. Stále automaticky, ale nespomaľuje prvé zobrazenie stránky.
  */
-import { CONTACT, MAP_LINK } from '../data/site';
+import { CONTACT, MAP_EMBED, MAP_LINK, SITE } from '../data/site';
 
-const mapEmbed =
-  'https://maps.google.com/maps?output=embed&z=15&q=' +
-  encodeURIComponent(
-    `${CONTACT.address.street}, ${CONTACT.address.postalCode} ${CONTACT.address.city}`,
-  );
+const mapTitle = `Mapa – sídlo ${SITE.name}, ${CONTACT.address.street}, ${CONTACT.address.city}`;
 ---
 
 <section class="section section--ink" id="kontakt">
@@ -59,42 +61,22 @@ const mapEmbed =
         <a class="btn btn--primary cta" href="#ponuka">Chcem cenovú ponuku</a>
       </div>
 
-      <div class="map" data-map data-src={mapEmbed}>
-        <a class="map__link" href={MAP_LINK} target="_blank" rel="noopener noreferrer">
-          <span class="map__pin" aria-hidden="true"></span>
-          <span class="map__label">Otvoriť v Google Mapách</span>
-          <span class="map__addr">
-            {CONTACT.address.street}, {CONTACT.address.postalCode} {CONTACT.address.city}
-          </span>
-        </a>
-        <button class="map__load" type="button" data-map-load hidden>Načítať mapu tu</button>
+      <div class="map">
+        <iframe
+          class="map__frame"
+          src={MAP_EMBED}
+          title={mapTitle}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+
+        <p class="map__foot">
+          <a class="map__out" href={MAP_LINK} target="_blank" rel="noopener noreferrer">Otvoriť v Google Mapách</a>
+          <span class="map__attr">Mapa © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></span>
+        </p>
       </div>
     </div>
   </div>
 </section>
-
-<script>
-  const map = document.querySelector<HTMLElement>('[data-map]');
-  const load = document.querySelector<HTMLButtonElement>('[data-map-load]');
-
-  if (map && load) {
-    // Tlačidlo sa objaví len keď beží JS — inak ostáva odkaz do Google Máp.
-    load.hidden = false;
-    load.addEventListener(
-      'click',
-      () => {
-        const iframe = document.createElement('iframe');
-        iframe.src = map.dataset.src ?? '';
-        iframe.title = 'Mapa – sídlo firmy';
-        iframe.loading = 'lazy';
-        iframe.referrerPolicy = 'no-referrer-when-downgrade';
-        iframe.className = 'map__frame';
-        map.replaceChildren(iframe);
-      },
-      { once: true },
-    );
-  }
-</script>
 
 <style>
   .cols {
@@ -147,79 +129,56 @@ const mapEmbed =
   }
 
   .map {
-    position: relative;
     display: flex;
+    flex-direction: column;
     min-height: 320px;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background: #171513;
     overflow: hidden;
   }
 
-  .map__link {
+  .map__frame {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 2rem;
-    text-align: center;
-    color: var(--on-dark);
-    /* Jemný raster, aby plocha pôsobila ako mapa, nie ako prázdny box. */
-    background-image:
-      linear-gradient(var(--hairline-dark-soft) 1px, transparent 1px),
-      linear-gradient(90deg, var(--hairline-dark-soft) 1px, transparent 1px);
-    background-size: 44px 44px;
-  }
-
-  .map__link:hover {
-    color: var(--a1);
-  }
-
-  .map__pin {
-    width: 14px;
-    height: 14px;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: var(--a1);
-  }
-
-  .map__label {
-    font-size: 0.78rem;
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
-
-  .map__addr {
-    font-size: 0.9rem;
-    color: var(--on-dark-65);
-  }
-
-  .map__load {
-    position: absolute;
-    bottom: 0.875rem;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0.625rem 1rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    background: rgba(14, 13, 12, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: var(--on-dark-80);
-    cursor: pointer;
-    transition: background-color var(--transition);
-  }
-
-  .map__load:hover {
-    background: var(--a1);
-    color: var(--ink2);
-  }
-
-  .map :global(.map__frame) {
+    display: block;
     width: 100%;
     min-height: 320px;
     border: 0;
+    /* Podklady OpenStreetMap sú svetlé — filter ich preladí do tmavej sekcie. */
     filter: invert(0.92) hue-rotate(180deg) brightness(0.94) contrast(0.9) saturate(0.7);
+  }
+
+  .map__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .map__out {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-dark-80);
+  }
+
+  .map__out:hover {
+    color: var(--a1);
+  }
+
+  .map__attr {
+    font-size: 0.72rem;
+    color: var(--on-dark-45);
+  }
+
+  .map__attr a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .map__attr a:hover {
+    color: var(--a1);
   }
 </style>
