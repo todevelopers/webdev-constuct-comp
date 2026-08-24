@@ -1,13 +1,19 @@
 name: Nasadenie na GitHub Pages
 
-# Nasadzuje sa z main aj z vývojovej vetvy. Obe idú na tú istú adresu, takže
-# platí posledný push — po zlúčení do main vývojovú vetvu z tohto zoznamu
-# pokojne odober, nech sa nepredbiehajú.
+# Nasadzuje sa LEN z main.
+#
+# Prostredie `github-pages` má v predvolenom nastavení GitHubu ochranné
+# pravidlo, ktoré púšťa nasadenie iba z predvolenej vetvy. Vývojová vetva sa
+# preto úspešne zbuildí, ale deploy jej GitHub odmietne. Držíme sa toho
+# pravidla: čo je na main, to je na webe.
+#
+# Ak by si chcel nasadzovať aj z vývojovej vetvy, treba to povoliť v
+# Settings → Environments → github-pages → Deployment branches
+# a vetvu dopísať sem do `branches`.
 on:
   push:
     branches:
       - main
-      - claude/css-support-js-compilation-yzi7gi
   workflow_dispatch:
 
 permissions:

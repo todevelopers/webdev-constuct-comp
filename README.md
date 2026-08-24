@@ -212,15 +212,23 @@ webu duplicitným obsahom. Rozpoznáva sa podľa toho, či web beží v podadres
 
 ### GitHub Pages
 
-Workflow `.github/workflows/deploy-pages.yml` pri každom pushi spustí build
-a nasadí `dist/`. Jednorazovo treba v repozitári zapnúť:
+Workflow `.github/workflows/deploy-pages.yml` pri každom pushi do `main`
+spustí build a nasadí `dist/`. Jednorazovo treba v repozitári zapnúť:
 
 **Settings → Pages → Source: GitHub Actions**
 
 (Nie „Deploy from a branch“ — ten by servíroval zdrojáky projektu, nie
 zostavený web, a skončil by na 404.)
 
-Po zlúčení do `main` doplň `main` medzi `branches` vo workflow.
+**Nasadzuje sa len z `main`.** Prostredie `github-pages` má v predvolenom
+nastavení GitHubu ochranné pravidlo, ktoré púšťa nasadenie iba z predvolenej
+vetvy — vývojová vetva sa zbuildí, ale deploy jej GitHub odmietne s hláškou
+*„is not allowed to deploy to github-pages due to environment protection
+rules“*. Nie je to chyba projektu.
+
+Ak by si chcel nasadzovať aj z vývojovej vetvy, povoľ ju v
+**Settings → Environments → github-pages → Deployment branches** a dopíš ju
+do `branches` vo workflow.
 
 ### Prechod na ostrú doménu
 
