@@ -147,14 +147,6 @@ stovky kB navyše. Odkaz „Otvoriť v Google Mapách“ zostáva pod mapou — 
 niekto neklikne, Googlu neodíde nič. Výrez sa počíta zo súradníc v
 `src/data/site.ts`.
 
-**Mapa sa zámerne nedá posúvať.** Špendlík v akcentovej farbe kreslíme my nad
-rámom mapy — dnu do cudzieho iframu sa žiadnym CSS nedostaneme, takže modrý
-špendlík od OpenStreetMap prefarbiť nejde. Ten náš ale stojí na mieste, takže
-keby sa mapa dala posunúť, prestal by ukazovať na sídlo. Priehľadná vrstva nad
-mapou preto pohyb blokuje a klik na mapu otvorí Google Mapu, kde sa dá hýbať
-aj navigovať. Vedľajší efekt je vítaný: na mobile ťahanie prstom po mape roluje
-stránku, nie mapu.
-
 **Hero je obrázok, nie video.** Hero je LCP prvok — video ho zdržiava o stovky
 milisekúnd na tom najdôležitejšom mieste stránky.
 

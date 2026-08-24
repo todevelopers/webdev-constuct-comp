@@ -102,10 +102,7 @@ const MAP_SPAN = { lng: 0.007, lat: 0.0035 } as const;
  * OpenStreetMap nenasadzuje reklamné cookies a je násobne ľahší. Odkaz do
  * Google Máp (MAP_LINK) zostáva vedľa mapy pre navigáciu.
  *
- * `bbox` je obdĺžnik výrezu v poradí západ, juh, východ, sever. Je súmerný
- * okolo súradníc sídla, takže stred mapy = sídlo — a špendlík vieme nakresliť
- * vlastný, presne do stredu rámu (viď Contact.astro). Marker od OpenStreetMap
- * preto zámerne nepýtame: je modrý a vnútri iframu sa prefarbiť nedá.
+ * `bbox` je obdĺžnik výrezu v poradí západ, juh, východ, sever.
  */
 export const MAP_EMBED = (() => {
   const { lat, lng } = CONTACT.geo;
@@ -118,7 +115,7 @@ export const MAP_EMBED = (() => {
   ]
     .map((n) => n.toFixed(6))
     .join(',');
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik`;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 })();
 
 /** Hlavná navigácia. Poradie tu = poradie v hlavičke aj v mobilnom menu. */
