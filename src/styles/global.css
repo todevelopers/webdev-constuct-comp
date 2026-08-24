@@ -27,6 +27,13 @@
   box-sizing: border-box;
 }
 
+/* Atribút `hidden` musí prebiť aj `display: flex` z komponentu. Bez tohto
+   pravidla vyhráva vlastný display z autorskej CSS a prvky, ktoré odkrýva až
+   JavaScript (filter realizácií, prepínač akcentu), by svietili aj bez neho. */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;

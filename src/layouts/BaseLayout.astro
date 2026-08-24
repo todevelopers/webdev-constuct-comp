@@ -8,6 +8,8 @@
 import { SITE } from '../data/site';
 import { withBase, isProductionDeploy } from '../lib/url';
 import ogDefault from '../assets/site/og-default.jpg';
+import AccentPicker from '../components/AccentPicker.astro';
+import { PALETTE_IDS, PALETTE_STORAGE_KEY } from '../data/palettes';
 import '../styles/global.css';
 
 // Fonty, ktoré potrebuje text nad ohybom stránky. Bez preloadu si ich
@@ -76,10 +78,26 @@ const fullTitle = isHome ? title : `${title} | ${SITE.name}`;
     <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
+    {
+      /* Uloženú paletu treba nastaviť ešte pred vykreslením stránky, inak by
+         na okamih bliklo východiskové oranžové. Preto je skript vložený priamo
+         v <head> a nie ako modul, ktorý sa načíta až po HTML. */
+    }
+    <script is:inline define:vars={{ storageKey: PALETTE_STORAGE_KEY, ids: PALETTE_IDS }}>
+      try {
+        const saved = localStorage.getItem(storageKey);
+        // Overujeme proti zoznamu — starý alebo ručne podstrčený záznam ignorujeme.
+        if (saved && ids.includes(saved)) document.documentElement.dataset.palette = saved;
+      } catch (e) {
+        /* Súkromné okno bez úložiska — ostane východisková paleta. */
+      }
+    </script>
+
     <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#obsah">Preskočiť na obsah</a>
     <slot />
+    <AccentPicker />
   </body>
 </html>
